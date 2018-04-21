@@ -1,6 +1,7 @@
 package com.car.game.cars;
 
-import com.car.game.cars.service.CarsDto;
+import com.car.game.cars.dto.CarInMapDto;
+import com.car.game.cars.dto.CarsDto;
 import com.car.game.cars.service.CarsService;
 import com.car.game.common.model.Car;
 import io.swagger.annotations.ApiOperation;
@@ -34,5 +35,11 @@ public class CarsController {
     @ApiOperation("usuniecie samochodu ")
     public void deleteCar(@RequestBody CarsDto carsDto){
         carsService.deleteCar(carsDto);
+    }
+
+    @PutMapping(value = "/car")
+    @ApiOperation("Start Game  Controller")
+    public void putCarInMap(@RequestBody CarInMapDto carInMapDto){
+        carsService.updateCars(carInMapDto);
     }
 }

@@ -17,4 +17,5 @@ public class Car {
     @EmbeddedId
     private CarPk carPk;
     private String mapName;
+    private boolean isCrashed;
 }

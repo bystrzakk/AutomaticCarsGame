@@ -8,5 +8,6 @@ public interface MapService {
     List<Map> getAllMaps();
     void addNewMap(Map map);
     boolean isExist(String name);
+    boolean startGame(String mapName);
 
 }

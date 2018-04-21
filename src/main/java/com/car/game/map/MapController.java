@@ -6,11 +6,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -32,10 +30,16 @@ public class MapController {
                    @PathVariable(value = "name") String name){
         boolean isExistMap = mapService.isExist(name);
         if(isExistMap){
-            mapService.addNewMap(new Map(id, name, "{1,0,1},{0,1,0},{0,1,0}",false));
+            mapService.addNewMap(new Map(id, name, "1,0,1;0,1,0;0,1,0",false));
             return true;
         }
         return false;
+    }
+
+    @PostMapping(value = "/start")
+    @ApiOperation("Start Game  Controller")
+    public Boolean startGame(@RequestParam(value = "name") String name){
+        return mapService.startGame(name);
     }
 
 }

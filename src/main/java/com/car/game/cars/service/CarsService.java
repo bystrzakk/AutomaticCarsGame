@@ -1,5 +1,8 @@
 package com.car.game.cars.service;
 
+import com.car.game.cars.dto.CarInMapDto;
+import com.car.game.cars.dto.CarsDto;
+import com.car.game.common.enums.CarType;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarPk;
 import com.car.game.common.repository.CarRepository;
@@ -63,5 +66,25 @@ public class CarsService {
         carPk.setName(carsDto.getName());
         carPk.setType(carsDto.getType());
         return carPk;
+    }
+    private CarPk getCarPk(String name , CarType carType) {
+        CarPk carPk = new CarPk();
+        carPk.setName(name);
+        carPk.setType(carType);
+        return carPk;
+    }
+
+
+    @Transactional
+    public void updateCars(CarInMapDto carInMapDto) {
+        if( !isExist(carInMapDto.getCar())){
+            Car car = new Car();
+            CarPk carPk = getCarPk(carInMapDto.getCar().getName(),carInMapDto.getCar().getType());
+            car.setCarPk(carPk);
+            car.setMapName(carInMapDto.getMapName());
+            carRepository.save(car);
+            log.info("Dodano  samochod  do gry");
+        }
+        log.info("Nie ma takiego samochodu");
     }
 }

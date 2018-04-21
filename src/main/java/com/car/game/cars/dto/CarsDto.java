@@ -1,4 +1,4 @@
-package com.car.game.cars.service;
+package com.car.game.cars.dto;
 
 import com.car.game.common.enums.CarType;
 import lombok.AllArgsConstructor;

@@ -2,6 +2,7 @@ package com.car.game.map.service;
 
 import com.car.game.common.model.Map;
 import com.car.game.common.repository.MapRepository;
+import com.car.game.game.ActualInformation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
@@ -30,11 +31,31 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public boolean isExist(String name) {
-        Map map = mapRepository.findByNameAndAndUsedIsFalse(name);
+        Map map = mapRepository.findByNameAndUsedIsFalse(name);
         if(map!=null){
             return false;
         }
 
+        return true;
+    }
+
+    public boolean startGame(String mapName){
+        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        if(actualInformation.getActualMapName()!=null){
+            log.info("nie mozna uruchomic nowej gry, obecnie jest aktywna mapa :"+ actualInformation.getActualMapName());
+            return false;
+        }
+
+        Map map = mapRepository.findByNameAndUsedIsFalse(mapName);
+
+        if ( map ==null){
+            log.info("bark mapy");
+            return false;
+        }
+
+        actualInformation.setActualMapName(mapName,map);
+        map.setUsed(true);
+        mapRepository.save(map);
         return true;
     }
 }

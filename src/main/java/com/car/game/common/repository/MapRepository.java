@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MapRepository extends JpaRepository<Map, Long> {
 
-    Map findByNameAndAndUsedIsFalse(String name);
+    Map findByNameAndUsedIsFalse(String name);
 }
