@@ -1,6 +1,6 @@
 package com.car.game.cars.dto;
 
-import com.car.game.game.Position;
+import com.car.game.common.enums.Move;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CarSetup {
-    private CarsDto car;
-    private String mapName;
-    private Position position;
+public class CarMove {
+     private CarsDto car;
+     private Move move;
 }

@@ -1,5 +1,6 @@
 package com.car.game.game;
 
+import com.car.game.cars.dto.CarMove;
 import com.car.game.common.model.Map;
 
 import java.util.Arrays;
@@ -29,6 +30,10 @@ public class ActualInformation {
 
     public static ActualInformation getGetActulaInformation() {
         return getActulaInformation;
+    }
+
+    public void move(CarMove carMove){
+        //trzeba dorobic logike
     }
 
     public  String getActualMapName() {

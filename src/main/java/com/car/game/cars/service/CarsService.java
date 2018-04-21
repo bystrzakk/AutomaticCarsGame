@@ -1,5 +1,6 @@
 package com.car.game.cars.service;
 
+import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.dto.CarsDto;
 import com.car.game.common.enums.CarType;
@@ -87,8 +88,6 @@ public class CarsService {
         log.info("Nie ma takiego samochodu lub jest to Sciana");
     }
 
-
-
     private void updateDB(CarSetup carSetup){
         Car car = new Car();
         CarPk carPk = getCarPk(carSetup.getCar().getName(), carSetup.getCar().getType());
@@ -99,6 +98,8 @@ public class CarsService {
     }
 
 
-    public void moveCar(CarSetup carSetup) {
+    public void moveCar(CarMove carMove) {
+        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        actualInformation.move(carMove);
     }
 }

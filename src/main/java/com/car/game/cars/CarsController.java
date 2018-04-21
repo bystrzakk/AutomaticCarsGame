@@ -1,5 +1,6 @@
 package com.car.game.cars;
 
+import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.dto.CarsDto;
 import com.car.game.cars.service.CarsService;
@@ -45,7 +46,7 @@ public class CarsController {
 
     @PostMapping(value = "/car/move")
     @ApiOperation("Move car on Map Controller")
-    public void moveCarOnMap(@RequestBody CarSetup carSetup){
-        carsService.moveCar(carSetup);
+    public void moveCarOnMap(@RequestBody CarMove carMove){
+        carsService.moveCar(carMove);
     }
 }
