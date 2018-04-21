@@ -1,10 +1,7 @@
 package com.car.game.game;
 
 import com.car.game.common.model.Map;
-import com.car.game.game.service.MapInformation;
-import com.car.game.game.service.Position;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +11,19 @@ public class ActualInformation {
     private static ActualInformation getActulaInformation = new ActualInformation();
     private static String  actualMapName = null;
     private static ConcurrentHashMap<Position,MapInformation> mapGame = null;
+
     private ActualInformation() {
+    }
+
+    public static ConcurrentHashMap<Position,MapInformation>  getMapGame(){
+        return mapGame;
+    }
+    public static void setActualMapName(String actualMapName) {
+        ActualInformation.actualMapName = actualMapName;
+    }
+
+    public static void setMapGame(ConcurrentHashMap<Position, MapInformation> mapGame) {
+        ActualInformation.mapGame = mapGame;
     }
 
     public static ActualInformation getGetActulaInformation() {
@@ -32,12 +41,11 @@ public class ActualInformation {
 
     public  void loadMapGame(String mapName,Map map) {
         mapGame = new ConcurrentHashMap<>();
-        List<String> mapInList = new ArrayList<String>(Arrays.asList(map.getMapBody().split(" ; ")));
+        List<String> mapInList = Arrays.asList(map.getMapBody().split(";"));
 
         mapInList.stream().forEach(
               a->  convertToConcurentHashMap(a)
         );
-
     }
 
     public void convertToConcurentHashMap(String mapBlock){
@@ -54,4 +62,14 @@ public class ActualInformation {
         mapGame.put(position,mapInformation);
     }
 
+    public Boolean isWall(Position position){
+        MapInformation mapInformation = mapGame.get(position);
+        if(mapInformation==null){
+            return true;
+        }
+        if(mapInformation.getIsWall()){
+          return true;
+        }
+        return  false;
+    }
 }

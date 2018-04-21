@@ -1,6 +1,7 @@
 package com.car.game.map;
 
 import com.car.game.common.model.Map;
+import com.car.game.game.ActualInformation;
 import com.car.game.map.service.MapService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,11 @@ public class MapController {
                    @PathVariable(value = "name") String name){
         boolean isExistMap = mapService.isExist(name);
         if(isExistMap){
-            mapService.addNewMap(new Map(id, name, "1,0,1;0,1,0;0,1,0",false));
+            Map map = new Map();
+            map.setName(name);
+            map.setMapBody("1,0,1;0,1,0;0,1,0");
+            map.setUsed(false);
+            mapService.addNewMap(map);
             return true;
         }
         return false;
@@ -40,6 +45,13 @@ public class MapController {
     @ApiOperation("Start Game  Controller")
     public Boolean startGame(@RequestParam(value = "name") String name){
         return mapService.startGame(name);
+
+    }
+
+    @PostMapping(value = "/stop")
+    @ApiOperation("Start Game  Controller")
+    public void stopGame(){
+         mapService.stopGame();
     }
 
 }

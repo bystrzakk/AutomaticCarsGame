@@ -9,5 +9,5 @@ public interface MapService {
     void addNewMap(Map map);
     boolean isExist(String name);
     boolean startGame(String mapName);
-
+    void stopGame();
 }

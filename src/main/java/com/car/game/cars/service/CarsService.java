@@ -1,11 +1,12 @@
 package com.car.game.cars.service;
 
-import com.car.game.cars.dto.CarInMapDto;
+import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.dto.CarsDto;
 import com.car.game.common.enums.CarType;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarPk;
 import com.car.game.common.repository.CarRepository;
+import com.car.game.game.ActualInformation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
@@ -25,7 +26,7 @@ public class CarsService {
 
     @Transactional
     public boolean addCar(CarsDto carsDto){
-        if( !isExist(carsDto)){
+        if( !exist(carsDto)){
             Car car = new Car();
             CarPk carPk = getCarPk(carsDto);
             car.setCarPk(carPk);
@@ -38,7 +39,7 @@ public class CarsService {
 
     }
 
-    private boolean isExist(CarsDto carsDto){
+    private boolean exist(CarsDto carsDto){
         CarPk carPk = getCarPk(carsDto);
         Car car = carRepository.findCarByCarPk(carPk);
         if(car==null){
@@ -76,15 +77,26 @@ public class CarsService {
 
 
     @Transactional
-    public void updateCars(CarInMapDto carInMapDto) {
-        if( !isExist(carInMapDto.getCar())){
-            Car car = new Car();
-            CarPk carPk = getCarPk(carInMapDto.getCar().getName(),carInMapDto.getCar().getType());
-            car.setCarPk(carPk);
-            car.setMapName(carInMapDto.getMapName());
-            carRepository.save(car);
-            log.info("Dodano  samochod  do gry");
+    public void addCarToMap(CarSetup carSetup) {
+        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        if( !exist(carSetup.getCar())&& !actualInformation.isWall(carSetup.getPosition())){
+            updateDB(carSetup);
         }
         log.info("Nie ma takiego samochodu");
+    }
+
+
+
+    private void updateDB(CarSetup carSetup){
+        Car car = new Car();
+        CarPk carPk = getCarPk(carSetup.getCar().getName(), carSetup.getCar().getType());
+        car.setCarPk(carPk);
+        car.setMapName(carSetup.getMapName());
+        carRepository.save(car);
+        log.info("Dodano  samochod  do gry");
+    }
+
+
+    public void moveCar(CarSetup carSetup) {
     }
 }

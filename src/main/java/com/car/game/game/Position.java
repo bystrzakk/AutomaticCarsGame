@@ -1,4 +1,4 @@
-package com.car.game.game.service;
+package com.car.game.game;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

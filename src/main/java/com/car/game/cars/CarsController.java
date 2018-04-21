@@ -1,6 +1,6 @@
 package com.car.game.cars;
 
-import com.car.game.cars.dto.CarInMapDto;
+import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.dto.CarsDto;
 import com.car.game.cars.service.CarsService;
 import com.car.game.common.model.Car;
@@ -25,21 +25,27 @@ public class CarsController {
          return  carsService.addCar(carsDto);
     }
 
-    @GetMapping(value = "/cars")
-    @ApiOperation("Pobranie wszyttsich dostepnych samochodów ")
-    public List<Car> getCars(){
-        return carsService.getCars() ;
-    }
-
     @DeleteMapping(value = "/car")
     @ApiOperation("usuniecie samochodu ")
     public void deleteCar(@RequestBody CarsDto carsDto){
         carsService.deleteCar(carsDto);
     }
 
-    @PutMapping(value = "/car")
-    @ApiOperation("Start Game  Controller")
-    public void putCarInMap(@RequestBody CarInMapDto carInMapDto){
-        carsService.updateCars(carInMapDto);
+    @GetMapping(value = "/cars")
+    @ApiOperation("Pobranie wszyttsich dostepnych samochodów ")
+    public List<Car> getCars(){
+        return carsService.getCars() ;
+    }
+
+    @PostMapping(value = "/car/first/setup")
+    @ApiOperation("Add car to game Controller")
+    public void putCarInMap(@RequestBody CarSetup carSetup){
+        carsService.addCarToMap(carSetup);
+    }
+
+    @PostMapping(value = "/car/move")
+    @ApiOperation("Move car on Map Controller")
+    public void moveCarOnMap(@RequestBody CarSetup carSetup){
+        carsService.moveCar(carSetup);
     }
 }
