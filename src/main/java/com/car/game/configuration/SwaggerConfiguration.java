@@ -1,4 +1,4 @@
-package com.car.game.Configuration;
+package com.car.game.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
