@@ -1,5 +1,6 @@
 package com.car.game.common.model;
 
+import com.car.game.common.enums.CarType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

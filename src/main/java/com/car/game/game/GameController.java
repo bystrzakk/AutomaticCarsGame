@@ -19,7 +19,7 @@ public class GameController {
     private GameService gameService;
 
     @PostMapping(value = "/start")
-    @ApiOperation("Add map Controller")
+    @ApiOperation("Start Game  Controller")
     public Boolean startGame(@PathVariable(value = "name") @NotNull String name){
         return gameService.startGame(name);
     }

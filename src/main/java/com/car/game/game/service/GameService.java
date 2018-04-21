@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Log
-@Component
+@Service
 @NoArgsConstructor
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class GameService {
@@ -33,7 +33,7 @@ public class GameService {
 
         actualInformation.setActualMapName(mapName);
         map.setUsed(true);
-        mapRepository.save(map);//sprawdzic czy nie tworzy sie now
+        mapRepository.save(map);
         return true;
     }
 }

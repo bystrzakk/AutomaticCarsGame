@@ -1,20 +1,20 @@
 package com.car.game.common.model;
 
-import com.car.game.common.enums.CarType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Car {
-
-    @Id
-    private long id;
-    private String name;
-    private CarType type;
+    @EmbeddedId
+    private CarPk carPk;
+    private String mapName;
 }
