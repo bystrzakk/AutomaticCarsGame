@@ -1,4 +1,4 @@
-package com.car.game.Model.Enum;
+package com.car.game.common.enums;
 
 public enum CarType {
 

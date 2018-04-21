@@ -1,8 +1,10 @@
-package com.car.game.Model;
+package com.car.game.common.model;
 
+import com.car.game.common.enums.CarType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Map {
@@ -20,4 +23,5 @@ public class Map {
     private long id;
     private String name;
     private String mapBody;
+    private boolean used;
 }
