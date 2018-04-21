@@ -1,6 +1,6 @@
-package com.car.game.Service;
+package com.car.game.Map.Service;
 
-import com.car.game.Model.Map;
+import com.car.game.Common.Model.Map;
 
 import java.util.List;
 

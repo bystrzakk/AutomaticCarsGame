@@ -1,6 +1,6 @@
-package com.car.game.Repository;
+package com.car.game.Common.Repository;
 
-import com.car.game.Model.Map;
+import com.car.game.Common.Model.Map;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

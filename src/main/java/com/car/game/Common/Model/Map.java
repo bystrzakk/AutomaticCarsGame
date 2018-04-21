@@ -1,4 +1,4 @@
-package com.car.game.Model;
+package com.car.game.Common.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

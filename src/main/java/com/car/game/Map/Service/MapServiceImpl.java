@@ -1,7 +1,7 @@
-package com.car.game.Service;
+package com.car.game.Map.Service;
 
-import com.car.game.Model.Map;
-import com.car.game.Repository.MapRepository;
+import com.car.game.Common.Model.Map;
+import com.car.game.Common.Repository.MapRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import java.util.List;
