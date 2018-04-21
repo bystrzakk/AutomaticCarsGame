@@ -25,15 +25,14 @@ public class MapController {
         return mapService.getAllMaps();
     }
 
-    @PostMapping(value = "/add/{id}/{name}")
+    @PostMapping(value = "/add/{name}")
     @ApiOperation("Add map Controller")
-    public Boolean addNewMap(@PathVariable(value = "id") long id,
-                   @PathVariable(value = "name") String name){
+    public Boolean addNewMap(@PathVariable(value = "name") String name){
         boolean isExistMap = mapService.isExist(name);
         if(isExistMap){
             Map map = new Map();
             map.setName(name);
-            map.setMapBody("1,0,1;0,1,0;0,1,0");
+            map.setMapBody("1,0,1,0,1,0,0,1,0");
             map.setUsed(false);
             mapService.addNewMap(map);
             return true;

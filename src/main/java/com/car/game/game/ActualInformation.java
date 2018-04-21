@@ -5,6 +5,7 @@ import com.car.game.common.model.Map;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class ActualInformation {
 
@@ -36,26 +37,30 @@ public class ActualInformation {
 
     public  void setActualMapName(String actualMapName, Map map) {
         ActualInformation.actualMapName = actualMapName;
-        loadMapGame(actualMapName,map);
+        loadMapGame(map);
     }
 
-    public  void loadMapGame(String mapName,Map map) {
+    public  void loadMapGame(Map map) {
         mapGame = new ConcurrentHashMap<>();
-        List<String> mapInList = Arrays.asList(map.getMapBody().split(";"));
-
-        mapInList.stream().forEach(
-              a->  convertToConcurentHashMap(a)
-        );
+        List<String> mapInListOfString = Arrays.asList(map.getMapBody().split(","));
+        List<Integer> mapInListOfInt = mapInListOfString.
+                stream().
+                map(Integer::parseInt).
+                collect(Collectors.toList());
+       int mapSize = (int)Math.sqrt(mapInListOfInt.size());
+       for(int y = 0 ; y<mapSize;y++){
+           int mapSizeX = mapSize;
+           for(int x = 0 ; x<mapSizeX;x++){
+               convertToConcurentHashMap(x,y,mapInListOfInt.get((y*mapSize)+x));
+           }
+       }
     }
 
-    public void convertToConcurentHashMap(String mapBlock){
-        String[] mapDataTable = mapBlock.split(",");
-        Position position = new Position(
-                Integer.valueOf(mapDataTable[0]),
-                Integer.valueOf(mapDataTable[1]));
+    public void convertToConcurentHashMap(int x,int y, int wall){
+        Position position = new Position(x,y);
 
         Boolean isWall = false;
-        if(Integer.valueOf(mapDataTable[2])==1){
+        if(wall==1){
             isWall = true;
         }
         MapInformation mapInformation = new MapInformation(isWall);

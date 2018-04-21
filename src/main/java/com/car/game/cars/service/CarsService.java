@@ -79,10 +79,12 @@ public class CarsService {
     @Transactional
     public void addCarToMap(CarSetup carSetup) {
         ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
-        if( !exist(carSetup.getCar())&& !actualInformation.isWall(carSetup.getPosition())){
-            updateDB(carSetup);
+        if(!actualInformation.isWall(carSetup.getPosition())){
+            if( exist(carSetup.getCar()) ){
+                updateDB(carSetup);
+            }
         }
-        log.info("Nie ma takiego samochodu");
+        log.info("Nie ma takiego samochodu lub jest to Sciana");
     }
 
 
