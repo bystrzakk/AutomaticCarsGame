@@ -54,8 +54,16 @@ public class MapServiceImpl implements MapService {
         }
 
         actualInformation.setActualMapName(mapName,map);
+        System.out.println(ActualInformation.getMapGame());
         map.setUsed(true);
         mapRepository.save(map);
         return true;
+    }
+
+    @Override
+    public void stopGame() {
+        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        actualInformation.setActualMapName(null);
+        actualInformation.setMapGame(null);
     }
 }
