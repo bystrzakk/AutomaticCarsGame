@@ -23,9 +23,11 @@ public class MapController {
         return mapService.getAllMaps();
     }
 
-    @PostMapping(value = "/add/{name}")
+    @PostMapping(value = "/map")
     @ApiOperation("Add map Controller")
-    public Boolean addNewMap(@PathVariable(value = "name") String name){
+    public Boolean addNewMap(@RequestParam(value = "name") String name,
+                             @RequestParam(value = "body") String body
+                             ){
         boolean isExistMap = mapService.isExist(name);
         if(isExistMap){
             MapGame mapGame = new MapGame();

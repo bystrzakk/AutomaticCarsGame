@@ -15,10 +15,18 @@ public class ActualInformation {
     private static ActualInformation getActulaInformation = new ActualInformation();
     private static String  actualMapName = null;
     private static ConcurrentHashMap<Position,MapInformation> concuretnHashMapGame = null;
+    private static int mapSize;
 
     private ActualInformation() {
     }
 
+    public  int getMapSize() {
+        return mapSize;
+    }
+
+    public  void setMapSize(int mapSize) {
+        ActualInformation.mapSize = mapSize;
+    }
     public  ConcurrentHashMap<Position,MapInformation> getConcuretnHashMapGame(){
         return concuretnHashMapGame;
     }
@@ -84,6 +92,7 @@ public class ActualInformation {
                 map(Integer::parseInt).
                 collect(Collectors.toList());
        int mapSize = (int)Math.sqrt(mapInListOfInt.size());
+       setMapSize(mapSize);
        for(int y = 0 ; y<mapSize;y++){
            int mapSizeX = mapSize;
            for(int x = 0 ; x<mapSizeX;x++){

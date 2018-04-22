@@ -113,7 +113,6 @@ public class CarsService {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         MapInformation mapInformation = actualInformation.getMapInformationByCar(carMove.getCar());
         Position position = actualInformation.getCarPositionByCar(carMove.getCar());
-        Boolean isWall = mapInformation.getIsWall();
 
         //TYLKO ZMIANA KIERUNKU,BEZ RUCHU
         if(carMove.getMove()!=FORWARD){
@@ -123,6 +122,10 @@ public class CarsService {
         }
 
         Position futurePosition = checkFuturePosition(mapInformation.getDirection(),position);
+        if(futurePosition==null){
+            log.info("Poza mapa");
+            return;
+        }
         MapInformation futureMapInformation = actualInformation.getMapInformation(futurePosition);
         //JESLI SCIANA
         if(futureMapInformation.getIsWall()){
@@ -241,6 +244,7 @@ public class CarsService {
 
 
     public Position checkFuturePosition(Direction direction, Position position){
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
         Position positionAfterMove ;
         switch (direction){
             case E:{
@@ -264,6 +268,9 @@ public class CarsService {
             }
         }
 
+        if(actualInformation.getMapSize()<=position.getX()||actualInformation.getMapSize()<=position.getY()){
+            return null;
+        }
         return positionAfterMove;
 
     }
