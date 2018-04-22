@@ -1,6 +1,6 @@
 package com.car.game.map.service;
 
-import com.car.game.common.model.Map;
+import com.car.game.common.model.MapGame;
 import com.car.game.common.repository.MapRepository;
 import com.car.game.game.ActualInformation;
 import lombok.AllArgsConstructor;
@@ -19,20 +19,20 @@ public class MapServiceImpl implements MapService {
     private MapRepository mapRepository;
 
     @Override
-    public List<Map> getAllMaps() {
+    public List<MapGame> getAllMaps() {
         return mapRepository.findAll();
     }
 
     @Override
-    public void addNewMap(Map map) {
-        mapRepository.save(map);
-        log.info("New map was added to DB");
+    public void addNewMap(MapGame mapGame) {
+        mapRepository.save(mapGame);
+        log.info("New mapGame was added to DB");
     }
 
     @Override
     public boolean isExist(String name) {
-        Map map = mapRepository.findByNameAndUsedIsFalse(name);
-        if(map!=null){
+        MapGame mapGame = mapRepository.findByNameAndUsedIsFalse(name);
+        if(mapGame !=null){
             return false;
         }
 
@@ -40,22 +40,30 @@ public class MapServiceImpl implements MapService {
     }
 
     public boolean startGame(String mapName){
-        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
         if(actualInformation.getActualMapName()!=null){
             log.info("nie mozna uruchomic nowej gry, obecnie jest aktywna mapa :"+ actualInformation.getActualMapName());
             return false;
         }
 
-        Map map = mapRepository.findByNameAndUsedIsFalse(mapName);
+        MapGame mapGame = mapRepository.findByNameAndUsedIsFalse(mapName);
 
-        if ( map ==null){
+        if ( mapGame ==null){
             log.info("bark mapy");
             return false;
         }
 
-        actualInformation.setActualMapName(mapName,map);
-        map.setUsed(true);
-        mapRepository.save(map);
+        actualInformation.setActualMapName(mapName, mapGame);
+        System.out.println(actualInformation.getConcuretnHashMapGame());
+        mapGame.setUsed(true);
+        mapRepository.save(mapGame);
         return true;
+    }
+
+    @Override
+    public void stopGame() {
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
+        actualInformation.setActualMapName(null);
+        actualInformation.setConcuretnHashMapGame(null);
     }
 }

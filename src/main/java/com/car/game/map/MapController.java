@@ -1,6 +1,6 @@
 package com.car.game.map;
 
-import com.car.game.common.model.Map;
+import com.car.game.common.model.MapGame;
 import com.car.game.map.service.MapService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -20,17 +19,22 @@ public class MapController {
 
     @GetMapping(value = "/all-maps")
     @ApiOperation("Get all maps Controller")
-    public List<Map> getAllMaps(){
+    public List<MapGame> getAllMaps(){
         return mapService.getAllMaps();
     }
 
-    @PostMapping(value = "/add/{id}/{name}")
+    @PostMapping(value = "/map")
     @ApiOperation("Add map Controller")
-    public Boolean addNewMap(@PathVariable(value = "id") long id,
-                   @PathVariable(value = "name") String name){
+    public Boolean addNewMap(@RequestParam(value = "name") String name,
+                             @RequestParam(value = "body") String body
+                             ){
         boolean isExistMap = mapService.isExist(name);
         if(isExistMap){
-            mapService.addNewMap(new Map(id, name, "1,0,1;0,1,0;0,1,0",false));
+            MapGame mapGame = new MapGame();
+            mapGame.setName(name);
+            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
+            mapGame.setUsed(false);
+            mapService.addNewMap(mapGame);
             return true;
         }
         return false;
@@ -40,6 +44,13 @@ public class MapController {
     @ApiOperation("Start Game  Controller")
     public Boolean startGame(@RequestParam(value = "name") String name){
         return mapService.startGame(name);
+
+    }
+
+    @PostMapping(value = "/stop")
+    @ApiOperation("Start Game  Controller")
+    public void stopGame(){
+         mapService.stopGame();
     }
 
 }

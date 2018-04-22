@@ -1,6 +1,5 @@
 package com.car.game.common.model;
 
-import com.car.game.common.enums.CarType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ import javax.persistence.Id;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Map {
+public class MapGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,4 +23,5 @@ public class Map {
     private String name;
     private String mapBody;
     private boolean used;
+
 }

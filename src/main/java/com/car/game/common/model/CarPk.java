@@ -18,3 +18,4 @@ public class CarPk  implements Serializable {
     private String name;
     private CarType type;
 }
+
