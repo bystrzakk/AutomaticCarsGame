@@ -14,22 +14,28 @@ import java.util.List;
 @Service
 @NoArgsConstructor
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class MapServiceImpl implements MapService {
+public class MapServiceImpl {
 
     private MapRepository mapRepository;
 
-    @Override
     public List<MapGame> getAllMaps() {
         return mapRepository.findAll();
     }
 
-    @Override
-    public void addNewMap(MapGame mapGame) {
-        mapRepository.save(mapGame);
-        log.info("New mapGame was added to DB");
+    public Boolean addNewMap(String mapName,String body) {
+        if(isExist(body)){
+            MapGame mapGame = new MapGame();
+            mapGame.setName(mapName);
+            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
+            mapGame.setUsed(false);
+            mapRepository.save(mapGame);
+            log.info("Dodano nową mape do DB");
+            return true;
+        }
+        log.info("Mapa o podanej nazwie juz istnieje");
+        return false;
     }
 
-    @Override
     public boolean isExist(String name) {
         MapGame mapGame = mapRepository.findByNameAndUsedIsFalse(name);
         if(mapGame !=null){
@@ -60,7 +66,6 @@ public class MapServiceImpl implements MapService {
         return true;
     }
 
-    @Override
     public void stopGame() {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         actualInformation.setActualMapName(null);

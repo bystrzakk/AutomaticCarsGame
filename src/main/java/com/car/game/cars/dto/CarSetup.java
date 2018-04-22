@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CarSetup {
-    private CarsDto car;
+    private CarDto car;
     private String mapName;
     private Position position;
 }

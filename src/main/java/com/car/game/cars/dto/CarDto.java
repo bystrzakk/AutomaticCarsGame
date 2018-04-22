@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CarsDto {
+public class CarDto {
     private @NotNull String name;
     private CarType type;
 }

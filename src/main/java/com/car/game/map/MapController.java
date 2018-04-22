@@ -1,7 +1,7 @@
 package com.car.game.map;
 
 import com.car.game.common.model.MapGame;
-import com.car.game.map.service.MapService;
+import com.car.game.map.service.MapServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,36 +15,25 @@ import java.util.List;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MapController {
 
-    private MapService mapService;
+    private MapServiceImpl mapService;
 
-    @GetMapping(value = "/all-maps")
-    @ApiOperation("Get all maps Controller")
+    @GetMapping(value = "/maps")
+    @ApiOperation("Pobierz wszytskie mapy")
     public List<MapGame> getAllMaps(){
         return mapService.getAllMaps();
     }
 
     @PostMapping(value = "/map")
-    @ApiOperation("Add map Controller")
+    @ApiOperation("Dodaj mape")
     public Boolean addNewMap(@RequestParam(value = "name") String name,
-                             @RequestParam(value = "body") String body
-                             ){
-        boolean isExistMap = mapService.isExist(name);
-        if(isExistMap){
-            MapGame mapGame = new MapGame();
-            mapGame.setName(name);
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
-            mapGame.setUsed(false);
-            mapService.addNewMap(mapGame);
-            return true;
-        }
-        return false;
+                             @RequestParam(value = "body") String body){
+        return mapService.addNewMap(name,body);
     }
 
     @PostMapping(value = "/start")
     @ApiOperation("Start Game  Controller")
     public Boolean startGame(@RequestParam(value = "name") String name){
         return mapService.startGame(name);
-
     }
 
     @PostMapping(value = "/stop")

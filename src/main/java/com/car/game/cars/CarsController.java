@@ -1,8 +1,8 @@
 package com.car.game.cars;
 
-import com.car.game.cars.dto.CarMove;
+import com.car.game.cars.dto.CarMoveDto;
 import com.car.game.cars.dto.CarSetup;
-import com.car.game.cars.dto.CarsDto;
+import com.car.game.cars.dto.CarDto;
 import com.car.game.cars.service.CarsService;
 import com.car.game.common.model.Car;
 import io.swagger.annotations.ApiOperation;
@@ -22,14 +22,14 @@ public class CarsController {
 
     @PostMapping(value = "/car")
     @ApiOperation("Dodanie samochodu ")
-    public boolean addCar(@RequestBody CarsDto carsDto){
-         return  carsService.addCar(carsDto);
+    public boolean addCar(@RequestBody CarDto carDto){
+         return  carsService.addCar(carDto);
     }
 
     @DeleteMapping(value = "/car")
     @ApiOperation("usuniecie samochodu ")
-    public void deleteCar(@RequestBody CarsDto carsDto){
-        carsService.deleteCar(carsDto);
+    public void deleteCar(@RequestBody CarDto carDto){
+        carsService.deleteCar(carDto);
     }
 
     @GetMapping(value = "/cars")
@@ -46,7 +46,7 @@ public class CarsController {
 
     @PostMapping(value = "/car/move")
     @ApiOperation("Move car on MapGame Controller")
-    public void moveCarOnMap(@RequestBody CarMove carMove){
-        carsService.moveCar(carMove);
+    public void moveCarOnMap(@RequestBody CarMoveDto carMoveDto){
+        carsService.moveCar(carMoveDto);
     }
 }
