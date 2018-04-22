@@ -79,7 +79,7 @@ public class CarsService {
 
     @Transactional
     public void addCarToMap(CarSetup carSetup) {
-        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
         if(!actualInformation.isWall(carSetup.getPosition())){
             if( exist(carSetup.getCar()) ){
                 updateDB(carSetup);
@@ -99,7 +99,7 @@ public class CarsService {
 
 
     public void moveCar(CarMove carMove) {
-        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
         actualInformation.move(carMove);
     }
 }

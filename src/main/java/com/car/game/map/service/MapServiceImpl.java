@@ -40,7 +40,7 @@ public class MapServiceImpl implements MapService {
     }
 
     public boolean startGame(String mapName){
-        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
         if(actualInformation.getActualMapName()!=null){
             log.info("nie mozna uruchomic nowej gry, obecnie jest aktywna mapa :"+ actualInformation.getActualMapName());
             return false;
@@ -62,7 +62,7 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public void stopGame() {
-        ActualInformation actualInformation = ActualInformation.getGetActulaInformation();
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
         actualInformation.setActualMapName(null);
         actualInformation.setMapGame(null);
     }

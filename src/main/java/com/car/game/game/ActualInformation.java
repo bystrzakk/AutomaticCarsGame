@@ -28,7 +28,7 @@ public class ActualInformation {
         ActualInformation.mapGame = mapGame;
     }
 
-    public static ActualInformation getGetActulaInformation() {
+    public static ActualInformation getActualInformation() {
         return getActulaInformation;
     }
 
