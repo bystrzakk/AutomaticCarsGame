@@ -1,6 +1,7 @@
 package com.car.game.cars.dto;
 
 import com.car.game.common.enums.Move;
+import com.car.game.common.model.CarPk;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CarMove {
-     private CarsDto car;
+     private CarPk car;
      private Move move;
 }

@@ -45,7 +45,7 @@ public class CarsController {
     }
 
     @PostMapping(value = "/car/move")
-    @ApiOperation("Move car on Map Controller")
+    @ApiOperation("Move car on MapGame Controller")
     public void moveCarOnMap(@RequestBody CarMove carMove){
         carsService.moveCar(carMove);
     }

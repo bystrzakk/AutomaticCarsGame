@@ -1,7 +1,6 @@
 package com.car.game.map;
 
-import com.car.game.common.model.Map;
-import com.car.game.game.ActualInformation;
+import com.car.game.common.model.MapGame;
 import com.car.game.map.service.MapService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -21,7 +19,7 @@ public class MapController {
 
     @GetMapping(value = "/all-maps")
     @ApiOperation("Get all maps Controller")
-    public List<Map> getAllMaps(){
+    public List<MapGame> getAllMaps(){
         return mapService.getAllMaps();
     }
 
@@ -30,11 +28,11 @@ public class MapController {
     public Boolean addNewMap(@PathVariable(value = "name") String name){
         boolean isExistMap = mapService.isExist(name);
         if(isExistMap){
-            Map map = new Map();
-            map.setName(name);
-            map.setMapBody("1,0,1,0,1,0,0,1,0");
-            map.setUsed(false);
-            mapService.addNewMap(map);
+            MapGame mapGame = new MapGame();
+            mapGame.setName(name);
+            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
+            mapGame.setUsed(false);
+            mapService.addNewMap(mapGame);
             return true;
         }
         return false;
