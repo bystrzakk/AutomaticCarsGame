@@ -6,10 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,20 +25,8 @@ public class MapController {
 
     @PostMapping(value = "/map")
     @ApiOperation("Add map Controller")
-    public String addNewMap(@RequestParam(value = "name") String name,
-                             @RequestParam(value = "body") String body
-                             ){
-        boolean isExistMap = mapService.isExist(name);
-        if(isExistMap){
-            MapGame mapGame = new MapGame();
-            mapGame.setName(name);
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
-            mapGame.setUsed(false);
-            mapService.addNewMap(mapGame);
-
-            return "Success";
-        }
-        return "Map already exist";
+    public String addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body){
+        return mapService.addNewMap(name, body);
     }
 
     @PostMapping(value = "/start")
@@ -57,4 +42,9 @@ public class MapController {
          mapService.stopGame();
     }
 
+    @PostMapping(value = "/map/delete")
+    @ApiOperation("Delete map Controller")
+    public Boolean deleteMap(@RequestParam(value = "name") String name){
+        return mapService.deleteMap(name);
+    }
 }
