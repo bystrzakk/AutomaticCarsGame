@@ -41,10 +41,12 @@ public class CarsService {
             CarPk carPk = getCarPk(carsDto);
             car.setCarPk(carPk);
             carRepository.save(car);
-            log.info("Dodano nowy samochod ");
+            log.info("New " + carsDto.getName() + " car was stored in Database");
+
             return true;
         }
-        log.info("Istnieje juz taki samochód");
+        log.warning("Given Car already exist in Database!");
+
         return false;
 
     }
@@ -52,7 +54,7 @@ public class CarsService {
     private boolean exist(CarsDto carsDto){
         CarPk carPk = getCarPk(carsDto);
         Car car = carRepository.findCarByCarPk(carPk);
-        if(car==null){
+        if(car == null){
             return false;
         }
         return true;
@@ -78,13 +80,13 @@ public class CarsService {
         carPk.setType(carsDto.getType());
         return carPk;
     }
+
     private CarPk getCarPk(String name , CarType carType) {
         CarPk carPk = new CarPk();
         carPk.setName(name);
         carPk.setType(carType);
         return carPk;
     }
-
 
     @Transactional
     public void addCarToMap(CarSetup carSetup) {
@@ -93,10 +95,10 @@ public class CarsService {
         Boolean isWall = actualInformation.isWall(mapInformation);
         Boolean isCar = actualInformation.isCar(mapInformation);
         if(isCar&&isWall&&exist(carSetup.getCar())){
-            log.info("dodano samochód do mapy");
+            log.info("Car was added to game");
             updateCarInDB(carSetup);
         }
-        log.info("Nie ma takiego samochodu lub jest to Sciana lub ");
+        log.info("Cant place car on given field");
     }
 
     private void updateCarInDB(CarSetup carSetup){
@@ -105,48 +107,47 @@ public class CarsService {
         car.setCarPk(carPk);
         car.setMapName(carSetup.getMapName());
         carRepository.save(car);
-        log.info("Dodano  samochod  do gry");
+        log.info("Car was added to game");
     }
-
 
     public void moveCar(CarMove carMove) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         MapInformation mapInformation = actualInformation.getMapInformationByCar(carMove.getCar());
         Position position = actualInformation.getCarPositionByCar(carMove.getCar());
 
-        //TYLKO ZMIANA KIERUNKU,BEZ RUCHU
+        // Changing only direction, no movement
         if(carMove.getMove()!=FORWARD){
-            mapInformation.setDirection(updateDirection(FORWARD,mapInformation));
-            actualInformation.updateConcurentHashMap(position,mapInformation);;
+            mapInformation.setDirection(updateDirection(FORWARD, mapInformation));
+            actualInformation.updateConcurentHashMap(position, mapInformation);;
             return;
         }
 
         Position futurePosition = checkFuturePosition(mapInformation.getDirection(),position);
-        if(futurePosition==null){
-            log.info("Poza mapa");
+        if(futurePosition == null){
+            log.warning("Out of the map!");
             return;
         }
         MapInformation futureMapInformation = actualInformation.getMapInformation(futurePosition);
-        //JESLI SCIANA
+
         if(futureMapInformation.getIsWall()){
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
-            actualInformation.updateConcurentHashMap(position,mapInformation);
+            actualInformation.updateConcurentHashMap(position, mapInformation);
             return;
         }
-        //ZMIANA MIEJSCA
-        if(futureMapInformation.getCar()==null){
-            actualInformation.updateConcurentHashMap(futurePosition,mapInformation);
+
+        if(futureMapInformation.getCar() == null){
+            actualInformation.updateConcurentHashMap(futurePosition, mapInformation);
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
-            actualInformation.updateConcurentHashMap(position,mapInformation);
+            actualInformation.updateConcurentHashMap(position, mapInformation);
             return;
         }
-        // ZDERZENIE Z INNYM SAMOCHODEM
+
         CarPk car = mapInformation.getCar();
         CarPk enemyCar = futureMapInformation.getCar();
 
-        resolveConflict(car,enemyCar,futurePosition,position,mapInformation);
+        resolveConflict(car, enemyCar, futurePosition, position, mapInformation);
     }
 
     public void resolveConflict(CarPk car,
@@ -158,29 +159,29 @@ public class CarsService {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
 
 
-        if(NORMAL==enemyCar.getType()&&TRUCK==car.getType()){
+        if(NORMAL == enemyCar.getType() && TRUCK == car.getType()){
             // GINIE PRZECIWNIK
-            actualInformation.updateConcurentHashMap(futurePosition,mapInformation);
-            clearField(mapInformation,position);
+            actualInformation.updateConcurentHashMap(futurePosition, mapInformation);
+            clearField(mapInformation, position);
             return;
         }
 
-        if(TRUCK==enemyCar.getType()&&NORMAL==car.getType()){
+        if(TRUCK == enemyCar.getType() && NORMAL == car.getType()){
             // GINE JA
-            clearField(mapInformation,position);
+            clearField(mapInformation, position);
             return;
         }
 
-        if(enemyCar.getType()==car.getType()){
+        if(enemyCar.getType() == car.getType()){
             // GINA OBYDWA
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
-            actualInformation.updateConcurentHashMap(position,mapInformation);
-            actualInformation.updateConcurentHashMap(futurePosition,mapInformation);
+            actualInformation.updateConcurentHashMap(position, mapInformation);
+            actualInformation.updateConcurentHashMap(futurePosition, mapInformation);
             return;
         }
 
-        if(RACING!=enemyCar.getType()&&RACING==car.getType()){
+        if(RACING != enemyCar.getType() && RACING == car.getType()){
             // GINNE JA
             clearField(mapInformation,position);
             return;
@@ -191,10 +192,10 @@ public class CarsService {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         mapInformation.setCar(null);
         mapInformation.setDirection(N);
-        actualInformation.updateConcurentHashMap(position,mapInformation);
+        actualInformation.updateConcurentHashMap(position, mapInformation);
     }
 
-    public Direction updateDirection(Move move,MapInformation mapInformation){
+    public Direction updateDirection(Move move, MapInformation mapInformation){
         Direction actualDirection = mapInformation.getDirection();
         Direction futureDirection;
         switch (actualDirection){

@@ -25,7 +25,7 @@ public class MapController {
 
     @PostMapping(value = "/map")
     @ApiOperation("Add map Controller")
-    public Boolean addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body){
+    public String addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body){
         return mapService.addNewMap(name, body);
     }
 

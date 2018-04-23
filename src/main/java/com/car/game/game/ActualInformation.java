@@ -84,6 +84,18 @@ public class ActualInformation {
         return concuretnHashMapGame.get(position);
     }
 
+    public void loadCSVMapGame(MapGame map){
+        String splitedMapBody[] = map.getMapBody().split(";");
+        int mapaaa[][] = new int[splitedMapBody.length][splitedMapBody.length];
+
+        for(int i = 0; i<splitedMapBody.length; i++){
+            String mapa2[] = splitedMapBody[i].split(",");
+            for(int j=0;j<splitedMapBody.length;j++){
+                mapaaa[i][j] = Integer.parseInt(mapa2[j]);
+            }
+        }
+    }
+
     public  void loadMapGame(MapGame mapGame) {
         concuretnHashMapGame = new ConcurrentHashMap<>();
         List<String> mapInListOfString = Arrays.asList(mapGame.getMapBody().split(","));

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MapService {
     List<MapGame> getAllMaps();
-    boolean addNewMap(String name, String body);
+    String addNewMap(String name, String body);
     boolean isMapExist(String name);
     boolean startGame(String mapName);
     void stopGame();

@@ -24,7 +24,7 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public boolean addNewMap(String name, String body) {
+    public String addNewMap(String name, String body) {
         if (!this.isMapExist(name)) {
             MapGame mapGame = new MapGame();
             mapGame.setName(name);
@@ -34,12 +34,12 @@ public class MapServiceImpl implements MapService {
             mapGame.setDeleted(false);
             mapRepository.save(mapGame);
 
-            log.info("New mapGame was added to DB");
-            return true;
+            log.info("New map `" + mapGame.getName() + "` was stored in Database");
+            return "Success";
         }
 
-        log.info("The map is curently added");
-        return false;
+        log.warning("The map `" + name + "` is curently added");
+        return "Map already exist";
     }
 
     @Override
@@ -86,14 +86,14 @@ public class MapServiceImpl implements MapService {
         MapGame mapGame = mapRepository.findByName(name);
 
         if (mapGame == null) {
-            log.info("The map was not found.");
+            log.warning("The map was not found.");
             return false;
         }
 
         ActualInformation actualInformation = ActualInformation.getActualInformation();
 
         if (actualInformation.getActualMapName() == name) {
-            log.info("You can't delete the map. Is currently in use.");
+            log.warning("You can't delete the map. Is currently in use.");
             return false;
         }
 
