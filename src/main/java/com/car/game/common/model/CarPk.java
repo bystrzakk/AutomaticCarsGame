@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
+@Embeddable // jelsi klasa Car uzywa  @EmbeddedId tutaj  @Embeddable jest zbedne 
 public class CarPk  implements Serializable {
     private String name;
     @Enumerated(EnumType.STRING)
