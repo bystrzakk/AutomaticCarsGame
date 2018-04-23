@@ -21,32 +21,32 @@ public class CarsController {
     private CarsService carsService;
 
     @PostMapping(value = "/car")
-    @ApiOperation("Dodanie samochodu ")
-    public boolean addCar(@RequestBody CarDto carDto){
-         return  carsService.addCar(carDto);
+    @ApiOperation("Adding new car")
+    public boolean addCar(@RequestBody CarsDto carsDto){
+         return  carsService.addCar(carsDto);
     }
 
     @DeleteMapping(value = "/car")
-    @ApiOperation("usuniecie samochodu ")
-    public void deleteCar(@RequestBody CarDto carDto){
-        carsService.deleteCar(carDto);
+    @ApiOperation("Removing car")
+    public void deleteCar(@RequestBody CarsDto carsDto){
+        carsService.deleteCar(carsDto);
     }
 
     @GetMapping(value = "/cars")
-    @ApiOperation("Pobranie wszyttsich dostepnych samochodów ")
+    @ApiOperation("Getting all cars")
     public List<Car> getCars(){
         return carsService.getCars() ;
     }
 
     @PostMapping(value = "/car/first/setup")
-    @ApiOperation("Add car to game Controller")
+    @ApiOperation("Add car to game controller")
     public void putCarInMap(@RequestBody CarSetup carSetup){
         carsService.addCarToMap(carSetup);
     }
 
     @PostMapping(value = "/car/move")
-    @ApiOperation("Move car on MapGame Controller")
-    public void moveCarOnMap(@RequestBody CarMoveDto carMoveDto){
-        carsService.moveCar(carMoveDto);
+    @ApiOperation("Move car on game map controller")
+    public void moveCarOnMap(@RequestBody CarMove carMove){
+        carsService.moveCar(carMove);
     }
 }

@@ -1,7 +1,7 @@
 package com.car.game.map;
 
 import com.car.game.common.model.MapGame;
-import com.car.game.map.service.MapServiceImpl;
+import com.car.game.map.service.MapService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -34,6 +34,7 @@ public class MapController {
     @ApiOperation("Start Game  Controller")
     public Boolean startGame(@RequestParam(value = "name") String name){
         return mapService.startGame(name);
+
     }
 
     @PostMapping(value = "/stop")
