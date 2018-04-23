@@ -26,7 +26,7 @@ public class MapServiceImpl implements MapService {
     @Override
     public void addNewMap(MapGame mapGame) {
         mapRepository.save(mapGame);
-        log.info("New mapGame was added to DB");
+        log.info("New map `" + mapGame.getName() + "` was stored in Database");
     }
 
     @Override

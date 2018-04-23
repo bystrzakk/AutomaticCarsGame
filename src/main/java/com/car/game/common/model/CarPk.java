@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
 
 @Getter
@@ -16,6 +18,7 @@ import java.io.Serializable;
 @Embeddable
 public class CarPk  implements Serializable {
     private String name;
+    @Enumerated(EnumType.STRING)
     private CarType type;
 }
 
