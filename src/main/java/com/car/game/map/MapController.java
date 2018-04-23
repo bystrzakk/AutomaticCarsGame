@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -35,6 +38,7 @@ public class MapController {
             mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
             mapGame.setUsed(false);
             mapService.addNewMap(mapGame);
+
             return "Success";
         }
         return "Map already exist";
