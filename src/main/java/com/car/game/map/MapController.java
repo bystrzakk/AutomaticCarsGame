@@ -18,27 +18,27 @@ public class MapController {
     private MapService mapService;
 
     @GetMapping(value = "/maps")
-    @ApiOperation("Pobierz wszytskie mapy")
+    @ApiOperation("Get all maps")
     public List<MapGame> getAllMaps(){
         return mapService.getAllMaps();
     }
 
     @PostMapping(value = "/map")
-    @ApiOperation("Dodaj mape")
+    @ApiOperation("Add map")
     public Boolean addNewMap(@RequestParam(value = "name") String name,
                              @RequestParam(value = "body") String body){
         return mapService.addNewMap(name,body);
     }
 
     @PostMapping(value = "/start")
-    @ApiOperation("Start Game  Controller")
+    @ApiOperation("Start game ")
     public Boolean startGame(@RequestParam(value = "name") String name){
         return mapService.startGame(name);
 
     }
 
     @PostMapping(value = "/stop")
-    @ApiOperation("Start Game  Controller")
+    @ApiOperation("Stop game")
     public void stopGame(){
          mapService.stopGame();
     }
