@@ -162,20 +162,20 @@ public class CarsService {
 
 
         if(NORMAL == enemyCar.getType() && TRUCK == car.getType()){
-            // GINIE PRZECIWNIK
+            // DEAD ENEMY
             actualInformation.updateConcurentHashMap(futurePosition,mapInformation);
             clearField(mapInformation,position);
             return;
         }
 
         if(TRUCK == enemyCar.getType() && NORMAL == car.getType()){
-            // GINE JA
+            // I DEAD
             clearField(mapInformation, position);
             return;
         }
 
         if(enemyCar.getType() == car.getType()){
-            // GINA OBYDWA
+            // DEAD BOTH
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
             actualInformation.updateConcurentHashMap(position, mapInformation);
@@ -184,7 +184,7 @@ public class CarsService {
         }
 
         if(RACING != enemyCar.getType() && RACING == car.getType()){
-            // GINNE JA
+            // I DEAD
             clearField(mapInformation,position);
             return;
         }

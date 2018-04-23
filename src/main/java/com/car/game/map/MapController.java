@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MapController {
 
-    private MapServiceImpl mapService;
+    private MapService mapService;
 
     @GetMapping(value = "/maps")
     @ApiOperation("Pobierz wszytskie mapy")

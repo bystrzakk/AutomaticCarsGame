@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @NoArgsConstructor
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class MapServiceImpl {
+public class MapService {
 
     private MapRepository mapRepository;
 
@@ -23,16 +23,16 @@ public class MapServiceImpl {
     }
 
     public Boolean addNewMap(String mapName,String body) {
-        if(isExist(body)){
+        if(isExist(mapName)){
             MapGame mapGame = new MapGame();
             mapGame.setName(mapName);
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
+            mapGame.setMapBody(body);
             mapGame.setUsed(false);
             mapRepository.save(mapGame);
-            log.info("Dodano nową mape do DB");
+            log.info("Add new mao to DB");
             return true;
         }
-        log.info("Mapa o podanej nazwie juz istnieje");
+        log.info("Map alredy exist");
         return false;
     }
 
@@ -48,7 +48,7 @@ public class MapServiceImpl {
     public boolean startGame(String mapName){
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         if(actualInformation.getActualMapName()!=null){
-            log.info("nie mozna uruchomic nowej gry, obecnie jest aktywna mapa :"+ actualInformation.getActualMapName());
+            log.info("Can not run map, map alredy runed :"+ actualInformation.getActualMapName());
             return false;
         }
 
