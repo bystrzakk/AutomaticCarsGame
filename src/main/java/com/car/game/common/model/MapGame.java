@@ -23,5 +23,6 @@ public class MapGame {
     private String name;
     private String mapBody;
     private boolean used;
+    private boolean deleted;
 
 }

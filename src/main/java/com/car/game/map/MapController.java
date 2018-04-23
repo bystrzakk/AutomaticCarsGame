@@ -25,19 +25,8 @@ public class MapController {
 
     @PostMapping(value = "/map")
     @ApiOperation("Add map Controller")
-    public Boolean addNewMap(@RequestParam(value = "name") String name,
-                             @RequestParam(value = "body") String body
-                             ){
-        boolean isExistMap = mapService.isExist(name);
-        if(isExistMap){
-            MapGame mapGame = new MapGame();
-            mapGame.setName(name);
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
-            mapGame.setUsed(false);
-            mapService.addNewMap(mapGame);
-            return true;
-        }
-        return false;
+    public Boolean addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body){
+        return mapService.addNewMap(name, body);
     }
 
     @PostMapping(value = "/start")
@@ -53,4 +42,9 @@ public class MapController {
          mapService.stopGame();
     }
 
+    @PostMapping(value = "/map/delete")
+    @ApiOperation("Delete map Controller")
+    public Boolean deleteMap(@RequestParam(value = "name") String name){
+        return mapService.deleteMap(name);
+    }
 }
