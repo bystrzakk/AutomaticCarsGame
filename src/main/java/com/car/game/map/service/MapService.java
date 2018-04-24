@@ -28,8 +28,7 @@ public class MapService {
         if (!isMapExist(mapName) && correctMapBodyFormat(body)) {
             MapGame mapGame = new MapGame();
             mapGame.setName(mapName);
-            //todo: zmienić na body
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
+            mapGame.setMapBody(body);
             mapGame.setUsed(false);
             mapGame.setDeleted(false);
             mapRepository.save(mapGame);
