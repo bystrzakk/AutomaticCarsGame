@@ -94,7 +94,6 @@ public class ActualInformation {
                 finalMapBody[i][j] = Integer.parseInt(splitedSecondMapBody[j]);
             }
         }
-        return finalMapBody;
     }
 
     public  void loadMapGame(MapGame mapGame) {
