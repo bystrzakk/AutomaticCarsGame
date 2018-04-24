@@ -1,8 +1,8 @@
 package com.car.game.cars.service;
 
-import com.car.game.cars.dto.CarMove;
+import com.car.game.cars.dto.CarMoveDto;
 import com.car.game.cars.dto.CarSetup;
-import com.car.game.cars.dto.CarsDto;
+import com.car.game.cars.dto.CarDto;
 import com.car.game.common.enums.CarType;
 import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
@@ -35,13 +35,13 @@ public class CarsService {
     private CarRepository carRepository;
 
     @Transactional
-    public boolean addCar(CarsDto carsDto){
-        if( !exist(carsDto)){
+    public boolean addCar(CarDto carDto){
+        if( !exist(carDto)){
             Car car = new Car();
-            CarPk carPk = getCarPk(carsDto);
+            CarPk carPk = getCarPk(carDto);
             car.setCarPk(carPk);
             carRepository.save(car);
-            log.info("New " + carsDto.getName() + " car was stored in Database");
+            log.info("New " + carDto.getName() + " car was stored in Database");
 
             return true;
         }
@@ -51,8 +51,8 @@ public class CarsService {
 
     }
 
-    private boolean exist(CarsDto carsDto){
-        CarPk carPk = getCarPk(carsDto);
+    private boolean exist(CarDto carDto){
+        CarPk carPk = getCarPk(carDto);
         Car car = carRepository.findCarByCarPk(carPk);
         if(car == null){
             return false;
@@ -64,9 +64,9 @@ public class CarsService {
         return carRepository.findAll();
     }
 
-    public void deleteCar(CarsDto carsDto) {
+    public void deleteCar(CarDto carDto) {
 
-        CarPk carPk = getCarPk(carsDto);
+        CarPk carPk = getCarPk(carDto);
         boolean exist = carRepository.existsById(carPk);
         if(exist){
             carRepository.deleteById(carPk);
@@ -74,10 +74,10 @@ public class CarsService {
     }
 
 
-    private CarPk getCarPk(CarsDto carsDto) {
+    private CarPk getCarPk(CarDto carDto) {
         CarPk carPk = new CarPk();
-        carPk.setName(carsDto.getName());
-        carPk.setType(carsDto.getType());
+        carPk.setName(carDto.getName());
+        carPk.setType(carDto.getType());
         return carPk;
     }
 
@@ -87,6 +87,7 @@ public class CarsService {
         carPk.setType(carType);
         return carPk;
     }
+
 
     @Transactional
     public void addCarToMap(CarSetup carSetup) {
@@ -110,15 +111,16 @@ public class CarsService {
         log.info("Car was added to game");
     }
 
-    public void moveCar(CarMove carMove) {
+
+    public void moveCar(CarMoveDto carMoveDto) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
-        MapInformation mapInformation = actualInformation.getMapInformationByCar(carMove.getCar());
-        Position position = actualInformation.getCarPositionByCar(carMove.getCar());
+        MapInformation mapInformation = actualInformation.getMapInformationByCar(carMoveDto.getCar());
+        Position position = actualInformation.getCarPositionByCar(carMoveDto.getCar());
 
         // Changing only direction, no movement
-        if(carMove.getMove()!=FORWARD){
-            mapInformation.setDirection(updateDirection(FORWARD, mapInformation));
-            actualInformation.updateConcurentHashMap(position, mapInformation);;
+        if(carMoveDto.getMove()!=FORWARD){
+            mapInformation.setDirection(updateDirection(FORWARD,mapInformation));
+            actualInformation.updateConcurentHashMap(position,mapInformation);;
             return;
         }
 
@@ -128,22 +130,22 @@ public class CarsService {
             return;
         }
         MapInformation futureMapInformation = actualInformation.getMapInformation(futurePosition);
-
+        //IF WALL
         if(futureMapInformation.getIsWall()){
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
-            actualInformation.updateConcurentHashMap(position, mapInformation);
+            actualInformation.updateConcurentHashMap(position,mapInformation);
             return;
         }
-
-        if(futureMapInformation.getCar() == null){
-            actualInformation.updateConcurentHashMap(futurePosition, mapInformation);
+        //CHANGE PLACE
+        if(futureMapInformation.getCar()==null){
+            actualInformation.updateConcurentHashMap(futurePosition,mapInformation);
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
-            actualInformation.updateConcurentHashMap(position, mapInformation);
+            actualInformation.updateConcurentHashMap(position,mapInformation);
             return;
         }
-
+        // CRASH IN ANTOHER CAR
         CarPk car = mapInformation.getCar();
         CarPk enemyCar = futureMapInformation.getCar();
 
@@ -160,20 +162,20 @@ public class CarsService {
 
 
         if(NORMAL == enemyCar.getType() && TRUCK == car.getType()){
-            // GINIE PRZECIWNIK
-            actualInformation.updateConcurentHashMap(futurePosition, mapInformation);
-            clearField(mapInformation, position);
+            // DEAD ENEMY
+            actualInformation.updateConcurentHashMap(futurePosition,mapInformation);
+            clearField(mapInformation,position);
             return;
         }
 
         if(TRUCK == enemyCar.getType() && NORMAL == car.getType()){
-            // GINE JA
+            // I DEAD
             clearField(mapInformation, position);
             return;
         }
 
         if(enemyCar.getType() == car.getType()){
-            // GINA OBYDWA
+            // DEAD BOTH
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
             actualInformation.updateConcurentHashMap(position, mapInformation);
@@ -182,7 +184,7 @@ public class CarsService {
         }
 
         if(RACING != enemyCar.getType() && RACING == car.getType()){
-            // GINNE JA
+            // I DEAD
             clearField(mapInformation,position);
             return;
         }

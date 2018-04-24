@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,27 +20,28 @@ public class MapController {
 
     private MapService mapService;
 
-    @GetMapping(value = "/all-maps")
-    @ApiOperation("Get all maps Controller")
+    @GetMapping(value = "/maps")
+    @ApiOperation("Get all maps")
     public List<MapGame> getAllMaps(){
         return mapService.getAllMaps();
     }
 
     @PostMapping(value = "/map")
-    @ApiOperation("Add map Controller")
-    public String addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body){
-        return mapService.addNewMap(name, body);
+    @ApiOperation("Add map")
+    public Boolean addNewMap(@RequestParam(value = "name") String name,
+                             @RequestParam(value = "body") String body){
+        return mapService.addNewMap(name,body);
     }
 
     @PostMapping(value = "/start")
-    @ApiOperation("Start Game  Controller")
+    @ApiOperation("Start game ")
     public Boolean startGame(@RequestParam(value = "name") String name){
         return mapService.startGame(name);
 
     }
 
     @PostMapping(value = "/stop")
-    @ApiOperation("Start Game  Controller")
+    @ApiOperation("Stop game")
     public void stopGame(){
          mapService.stopGame();
     }

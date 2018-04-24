@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CarMove {
+public class CarMoveDto {
      private CarPk car;
      private Move move;
 }
