@@ -52,10 +52,7 @@ public class CarsService {
     private boolean exist(CarDto carDto){
         CarPk carPk = carsAssembler.getCarPk(carDto);
         Car car = carRepository.findCarByCarPk(carPk);
-        if(car == null){
-            return false;
-        }
-        return true;
+        return (car == null) ? false : true;
     }
 
     public List<Car> getCars(){
@@ -74,20 +71,31 @@ public class CarsService {
         return false;
     }
 
-
-
-
     @Transactional
-    public void addCarToMap(CarSetup carSetup) {
+    public boolean addCarToMap(CarSetup carSetup) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         MapInformation mapInformation = actualInformation.getMapInformation(carSetup.getPosition());
         Boolean isWall = actualInformation.isWall(mapInformation);
         Boolean isCar = actualInformation.isCar(mapInformation);
-        if(isCar&&isWall&&exist(carSetup.getCar())){
+        if(isWall||isCar||exist(carSetup.getCar())){
+            log.info("Cant place car on given field");
+            return false;
+        }
+        if(!checkPositionIsOnMap(carSetup.getPosition())){
+            log.info("Out of map");
+            return false;
+        }
             log.info("Car was added to game");
             updateCarInDB(carSetup);
+            return true;
+    }
+
+    private boolean checkPositionIsOnMap(Position position){
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
+        if(actualInformation.getMapSize()<=position.getX()||actualInformation.getMapSize()<=position.getY()){
+            return false;
         }
-        log.info("Cant place car on given field");
+        return true;
     }
 
     private void updateCarInDB(CarSetup carSetup){
@@ -98,7 +106,6 @@ public class CarsService {
         carRepository.save(car);
         log.info("Car was added to game");
     }
-
 
     public void moveCar(CarMoveDto carMoveDto) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
@@ -147,7 +154,6 @@ public class CarsService {
                                 MapInformation mapInformation){
 
         ActualInformation actualInformation = ActualInformation.getActualInformation();
-
 
         if(NORMAL == enemyCar.getType() && TRUCK == car.getType()){
             // DEAD ENEMY
@@ -213,7 +219,6 @@ public class CarsService {
 
         return futureDirection;
     }
-
 
     public Position checkFuturePosition(Direction direction, Position position){
         ActualInformation actualInformation = ActualInformation.getActualInformation();

@@ -48,8 +48,9 @@ public class CarsController {
     @PostMapping(value = "/car/first/setup")
     @ApiOperation("Add car to game controller")
     @ResponseStatus(OK)
-    public void putCarInMap(@RequestBody CarSetup carSetup){
-        carsService.addCarToMap(carSetup);
+    public boolean putCarInMap(@RequestBody CarSetup carSetup){
+
+        return carsService.addCarToMap(carSetup);
     }
 
     @PostMapping(value = "/car/move")

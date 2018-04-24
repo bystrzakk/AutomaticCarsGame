@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MapService {
 
+    private MapAssembler mapAssembler;
     private MapRepository mapRepository;
 
     public List<MapGame> getAllMaps() {
@@ -26,18 +27,10 @@ public class MapService {
 
     public boolean addNewMap(String mapName, String body) {
         if (!isMapExist(mapName) && correctMapBodyFormat(body)) {
-            MapGame mapGame = new MapGame();
-            mapGame.setName(name);
-            //todo: zmienić na body
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
-            mapGame.setUsed(false);
-            mapGame.setDeleted(false);
-            mapRepository.save(mapGame);
-
-            log.info("New map `" + mapGame.getName() + "` was stored in Database");
+            mapRepository.save(mapAssembler.getMapGame(mapName,body));
+            log.info("New map `" + mapName + "` was stored in Database");
             return true;
         }
-
         log.warning("The map `" + mapName + "` is curently added");
         return false;
     }
@@ -52,18 +45,17 @@ public class MapService {
             log.warning("You can't launch a new game, the selected map: " + actualInformation.getActualMapName() + " is currently in use.");
             return false;
         }
-
         MapGame mapGame = mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName);
-
         if (mapGame == null) {
             log.info("The map " + mapName + " does not exist.");
             return false;
         }
 
-        actualInformation.setActualMapName(mapName, mapGame);
-        System.out.println(actualInformation.getConcuretnHashMapGame());
         mapGame.setUsed(true);
+        actualInformation.setActualMapName(mapName, mapGame);
         mapRepository.save(mapGame);
+
+        log.info(actualInformation.getConcuretnHashMapGame().toString());
         return true;
     }
 
