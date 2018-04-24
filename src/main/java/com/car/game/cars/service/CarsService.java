@@ -41,14 +41,11 @@ public class CarsService {
             CarPk carPk = getCarPk(carDto);
             car.setCarPk(carPk);
             carRepository.save(car);
-            log.info("New " + carDto.getName() + " car was stored in Database");
-
+            log.info("New " + carDto.getName() + " car was stored in database");
             return true;
         }
-        log.warning("Given Car already exist in Database!");
-
+        log.warning("Given car already exist in database!");
         return false;
-
     }
 
     private boolean exist(CarDto carDto){
@@ -64,15 +61,17 @@ public class CarsService {
         return carRepository.findAll();
     }
 
-    public void deleteCar(CarDto carDto) {
-
+    public boolean deleteCar(CarDto carDto) {
         CarPk carPk = getCarPk(carDto);
         boolean exist = carRepository.existsById(carPk);
         if(exist){
             carRepository.deleteById(carPk);
+            log.info("Car " + carDto.getName() + " has been removed from database");
+            return true;
         }
+        log.warning("Problem with removing car: "+ carDto.getName());
+        return false;
     }
-
 
     private CarPk getCarPk(CarDto carDto) {
         CarPk carPk = new CarPk();
