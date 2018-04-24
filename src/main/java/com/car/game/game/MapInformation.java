@@ -18,7 +18,7 @@ public class MapInformation {
     private Direction direction = N;
     private Boolean isCrashed;
 
-    public MapInformation(Boolean isWall ){
+    public MapInformation(Boolean isWall ) {
         this.isWall = isWall;
     }
 }

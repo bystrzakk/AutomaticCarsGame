@@ -22,20 +22,19 @@ public class MapController {
 
     @GetMapping(value = "/maps")
     @ApiOperation("Get all maps")
-    public List<MapGame> getAllMaps(){
+    public List<MapGame> getAllMaps() {
         return mapService.getAllMaps();
     }
 
     @PostMapping(value = "/map")
     @ApiOperation("Add map")
-    public Boolean addNewMap(@RequestParam(value = "name") String name,
-                             @RequestParam(value = "body") String body){
+    public Boolean addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body) {
         return mapService.addNewMap(name,body);
     }
 
     @PostMapping(value = "/start")
-    @ApiOperation("Start game ")
-    public Boolean startGame(@RequestParam(value = "name") String name){
+    @ApiOperation("Start game")
+    public Boolean startGame(@RequestParam(value = "name") String name) {
         return mapService.startGame(name);
 
     }
@@ -47,8 +46,8 @@ public class MapController {
     }
 
     @PostMapping(value = "/map/delete")
-    @ApiOperation("Delete map Controller")
-    public Boolean deleteMap(@RequestParam(value = "name") String name){
+    @ApiOperation("Delete map")
+    public Boolean deleteMap(@RequestParam(value = "name") String name) {
         return mapService.deleteMap(name);
     }
 }

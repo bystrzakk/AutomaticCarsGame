@@ -13,23 +13,25 @@ import java.util.stream.Collectors;
 public class ActualInformation {
 
     private static ActualInformation getActulaInformation = new ActualInformation();
-    private static String  actualMapName = null;
+    private static String actualMapName = null;
     private static ConcurrentHashMap<Position,MapInformation> concuretnHashMapGame = null;
     private static int mapSize;
 
     private ActualInformation() {
     }
 
-    public  int getMapSize() {
+    public int getMapSize() {
         return mapSize;
     }
 
-    public  void setMapSize(int mapSize) {
+    private void setMapSize(int mapSize) {
         ActualInformation.mapSize = mapSize;
     }
-    public  ConcurrentHashMap<Position,MapInformation> getConcuretnHashMapGame(){
+
+    public ConcurrentHashMap<Position,MapInformation> getConcuretnHashMapGame() {
         return concuretnHashMapGame;
     }
+
     public static void setActualMapName(String actualMapName) {
         ActualInformation.actualMapName = actualMapName;
     }
@@ -42,12 +44,12 @@ public class ActualInformation {
         return getActulaInformation;
     }
 
-    public void updateConcurentHashMap( Position position,MapInformation mapInformation){
+    public void updateConcurentHashMap( Position position,MapInformation mapInformation) {
         ConcurrentHashMap<Position,MapInformation>  map = getConcuretnHashMapGame();
         map.replace(position,mapInformation);
     }
 
-    public MapInformation getMapInformationByCar(CarPk carPk){
+    public MapInformation getMapInformationByCar(CarPk carPk) {
         ConcurrentHashMap<Position,MapInformation>  map = getConcuretnHashMapGame();
         MapInformation mapInformation = map
                 .entrySet()
@@ -59,7 +61,7 @@ public class ActualInformation {
         return mapInformation;
     }
 
-    public Position getCarPositionByCar(CarPk carPk){
+    public Position getCarPositionByCar(CarPk carPk) {
         ConcurrentHashMap<Position,MapInformation>  map = getConcuretnHashMapGame();
         Position position = map
                 .entrySet()
@@ -75,16 +77,16 @@ public class ActualInformation {
         return actualMapName;
     }
 
-    public  void setActualMapName(String actualMapName, MapGame mapGame) {
+    public void setActualMapName(String actualMapName, MapGame mapGame) {
         ActualInformation.actualMapName = actualMapName;
         loadMapGame(mapGame);
     }
 
-    public MapInformation getMapInformation(Position position){
+    public MapInformation getMapInformation(Position position) {
         return concuretnHashMapGame.get(position);
     }
 
-    public void loadCSVMapGame(MapGame map){
+    public void loadCSVMapGame(MapGame map) {
         String splitedFirstMapBody[] = map.getMapBody().split(";");
         int finalMapBody[][] = new int[splitedFirstMapBody.length][splitedFirstMapBody.length];
 
@@ -96,7 +98,7 @@ public class ActualInformation {
         }
     }
 
-    public  void loadMapGame(MapGame mapGame) {
+    private void loadMapGame(MapGame mapGame) {
         concuretnHashMapGame = new ConcurrentHashMap<>();
         List<String> mapInListOfString = Arrays.asList(mapGame.getMapBody().split(","));
         List<Integer> mapInListOfInt = mapInListOfString.
@@ -113,7 +115,7 @@ public class ActualInformation {
        }
     }
 
-    public void convertToConcurentHashMap(int x,int y, int wall){
+    private void convertToConcurentHashMap(int x, int y, int wall){
         Position position = new Position(x,y);
 
         Boolean isWall = false;

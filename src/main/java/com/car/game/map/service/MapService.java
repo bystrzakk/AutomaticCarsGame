@@ -23,10 +23,10 @@ public class MapService {
         return mapRepository.findAll();
     }
 
-    public boolean addNewMap(String name, String body) {
-        if (!this.isMapExist(name) && correctMapBodyFormat(body)) {
+    public boolean addNewMap(String mapName, String body) {
+        if (!isMapExist(mapName) && correctMapBodyFormat(body)) {
             MapGame mapGame = new MapGame();
-            mapGame.setName(name);
+            mapGame.setName(mapName);
             //todo: zmienić na body
             mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
             mapGame.setUsed(false);
@@ -37,31 +37,25 @@ public class MapService {
             return true;
         }
 
-        log.warning("The map `" + name + "` is curently added");
+        log.warning("The map `" + mapName + "` is curently added");
         return false;
     }
 
-    public boolean isMapExist(String name) {
-        MapGame mapGame = mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(name);
-
-        if (mapGame == null) {
-            return false;
-        }
-
-        return true;
+    private boolean isMapExist(String mapName) {
+        return mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName) == null ?  false : true;
     }
 
-    public boolean startGame(String mapName){
+    public boolean startGame(String mapName) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
-        if(actualInformation.getActualMapName()!=null){
-            log.info("nie mozna uruchomic nowej gry, obecnie jest aktywna mapa :"+ actualInformation.getActualMapName());
+        if (actualInformation.getActualMapName() != null) {
+            log.warning("You can't launch a new game, the selected map: " + actualInformation.getActualMapName() + " is currently in use.");
             return false;
         }
 
         MapGame mapGame = mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName);
 
-        if ( mapGame ==null){
-            log.info("bark mapy");
+        if (mapGame == null) {
+            log.info("The map " + mapName + " does not exist.");
             return false;
         }
 
@@ -78,8 +72,8 @@ public class MapService {
         actualInformation.setConcuretnHashMapGame(null);
     }
 
-    public boolean deleteMap(String name) {
-        MapGame mapGame = mapRepository.findByName(name);
+    public boolean deleteMap(String mapName) {
+        MapGame mapGame = mapRepository.findByName(mapName);
 
         if (mapGame == null) {
             log.warning("The map was not found.");
@@ -88,8 +82,8 @@ public class MapService {
 
         ActualInformation actualInformation = ActualInformation.getActualInformation();
 
-        if (actualInformation.getActualMapName() == name) {
-            log.warning("You can't delete the map. Is currently in use.");
+        if (actualInformation.getActualMapName() == mapName) {
+            log.warning("You can't delete the map: " + mapName + ". Is currently in use.");
             return false;
         }
 
@@ -99,7 +93,7 @@ public class MapService {
         } else {
             mapRepository.delete(mapGame);
         }
-        log.info("Map was deleted.");
+        log.info("Map " + mapName + " was deleted.");
         return true;
     }
     
