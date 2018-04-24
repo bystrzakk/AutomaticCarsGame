@@ -15,12 +15,14 @@ Coding Interview Challenge
     Springboot - 2.0.1
 ##### 3. ORM
     Spring data-jpa - Kay-SR6
-    Querydsl - 4.2.1
 ##### 4. Build Tool
     Gradle - 4.6
 ##### 5. Tests: 
-    JUnit 5
+    JUnit 4
+    AssertJ
 ##### 6. Libraries
     Lombok - 1.16.20
 ##### 7. Data Base
-    fongodb - 2.1.0
+    H2 Database - 1.4.197
+##### 8. Tools
+    Swagger2 - 2.8.0
