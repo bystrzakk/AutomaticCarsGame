@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @NoArgsConstructor
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -21,31 +25,36 @@ public class CarsController {
     private CarsService carsService;
 
     @PostMapping(value = "/car")
-    @ApiOperation("Adding new car")
-    public boolean addCar(@RequestBody CarDto carsDto){
-         return  carsService.addCar(carsDto);
+    @ApiOperation("Add new car")
+    @ResponseStatus(CREATED)
+    public boolean addCar(@RequestBody CarDto carDto){
+        return carsService.addCar(carDto);
     }
 
     @DeleteMapping(value = "/car")
-    @ApiOperation("Removing car")
+    @ApiOperation("Remove car")
+    @ResponseStatus(NO_CONTENT)
     public void deleteCar(@RequestBody CarDto carsDto){
         carsService.deleteCar(carsDto);
     }
 
     @GetMapping(value = "/cars")
-    @ApiOperation("Getting all cars")
+    @ApiOperation("Get all cars")
+    @ResponseStatus(OK)
     public List<Car> getCars(){
         return carsService.getCars() ;
     }
 
     @PostMapping(value = "/car/first/setup")
     @ApiOperation("Add car to game controller")
+    @ResponseStatus(OK)
     public void putCarInMap(@RequestBody CarSetup carSetup){
         carsService.addCarToMap(carSetup);
     }
 
     @PostMapping(value = "/car/move")
     @ApiOperation("Move car on game map controller")
+    @ResponseStatus(OK)
     public void moveCarOnMap(@RequestBody CarMoveDto carMove){
         carsService.moveCar(carMove);
     }
