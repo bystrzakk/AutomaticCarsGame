@@ -23,37 +23,35 @@ public class MapController {
 
     @GetMapping(value = "/maps")
     @ApiOperation("Get all maps")
-    public List<MapGame> getAllMaps(){
+    public List<MapGame> getAllMaps() {
         return mapService.getAllMaps();
     }
 
     @PostMapping(value = "/map")
     @ApiOperation("Add map")
     @ResponseStatus(CREATED)
-    public boolean addNewMap(@RequestParam(value = "name") String name,
-                             @RequestParam(value = "body") String body){
+    public Boolean addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body) {
         return mapService.addNewMap(name,body);
     }
 
-    @PostMapping(value = "/start")
-    @ApiOperation("Start game ")
+    @PostMapping(value = "/select")
+    @ApiOperation("Select the map")
     @ResponseStatus(OK)
-    public Boolean startGame(@RequestParam(value = "name") String name){
-        return mapService.startGame(name);
-
+    public Boolean selectMap(@RequestParam(value = "name") String name) {
+        return mapService.selectMap(name);
     }
 
-    @PostMapping(value = "/stop")
-    @ApiOperation("Stop game")
+    @PostMapping(value = "/unselect")
+    @ApiOperation("Unselect the game")
     @ResponseStatus(OK)
-    public void stopGame(){
-         mapService.stopGame();
+    public void unselectMap(){
+         mapService.unselectMap();
     }
 
-    @PostMapping(value = "/map/delete")
-    @ApiOperation("Delete map Controller")
+    @DeleteMapping(value = "/map")
+    @ApiOperation("Delete map")
     @ResponseStatus(NO_CONTENT)
-    public Boolean deleteMap(@RequestParam(value = "name") String name){
+    public Boolean deleteMap(@RequestParam(value = "name") String name) {
         return mapService.deleteMap(name);
     }
 }
