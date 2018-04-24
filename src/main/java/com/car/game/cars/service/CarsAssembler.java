@@ -21,13 +21,4 @@ public class CarsAssembler {
                 .build();
         return carPk;
     }
-
-    public CarPk getCarPk(String name , CarType carType) {
-        CarPk carPk =  CarPk
-                .builder()
-                .name(name)
-                .type(carType)
-                .build();
-        return carPk;
-    }
 }

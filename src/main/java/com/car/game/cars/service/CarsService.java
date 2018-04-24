@@ -100,7 +100,7 @@ public class CarsService {
 
     private void updateCarInDB(CarSetup carSetup){
         Car car = new Car();
-        CarPk carPk = carsAssembler.getCarPk(carSetup.getCar().getName(), carSetup.getCar().getType());
+        CarPk carPk = carsAssembler.getCarPk(carSetup.getCar());
         car.setCarPk(carPk);
         car.setMapName(carSetup.getMapName());
         carRepository.save(car);
