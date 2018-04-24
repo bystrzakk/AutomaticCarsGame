@@ -1,8 +1,8 @@
 package com.car.game.cars.service;
 
+import com.car.game.cars.dto.CarDto;
 import com.car.game.cars.dto.CarMoveDto;
 import com.car.game.cars.dto.CarSetup;
-import com.car.game.cars.dto.CarDto;
 import com.car.game.common.enums.CarType;
 import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
@@ -200,41 +200,22 @@ public class CarsService {
     public Direction updateDirection(Move move, MapInformation mapInformation){
         Direction actualDirection = mapInformation.getDirection();
         Direction futureDirection;
+
         switch (actualDirection){
             case S:{
-                if(move.equals(TURN_LEFT)){
-                    futureDirection = E;
-                }
-                else {
-                    futureDirection = W;
-                }
+                futureDirection = move.equals(TURN_LEFT) ? E : W;
                 break;
             }
             case N:{
-                if(move.equals(TURN_LEFT)){
-                    futureDirection = W;
-                }
-                else {
-                    futureDirection = E;
-                }
+                futureDirection = move.equals(TURN_LEFT) ? W : E;
                 break;
             }
             case W:{
-                if(move.equals(TURN_LEFT)){
-                    futureDirection = S;
-                }
-                else {
-                    futureDirection = N;
-                }
+                futureDirection = move.equals(TURN_LEFT) ? S : N;
                 break;
             }
             case E:{
-                if(move.equals(TURN_LEFT)){
-                    futureDirection = N;
-                }
-                else {
-                    futureDirection = S;
-                }
+                futureDirection = move.equals(TURN_LEFT) ? N : S;
                 break;
             }
             default:{
