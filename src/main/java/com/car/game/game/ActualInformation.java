@@ -85,15 +85,16 @@ public class ActualInformation {
     }
 
     public void loadCSVMapGame(MapGame map){
-        String splitedMapBody[] = map.getMapBody().split(";");
-        int mapaaa[][] = new int[splitedMapBody.length][splitedMapBody.length];
+        String splitedFirstMapBody[] = map.getMapBody().split(";");
+        int finalMapBody[][] = new int[splitedFirstMapBody.length][splitedFirstMapBody.length];
 
-        for(int i = 0; i<splitedMapBody.length; i++){
-            String mapa2[] = splitedMapBody[i].split(",");
-            for(int j=0;j<splitedMapBody.length;j++){
-                mapaaa[i][j] = Integer.parseInt(mapa2[j]);
+        for(int i = 0; i<splitedFirstMapBody.length; i++){
+            String splitedSecondMapBody[] = splitedFirstMapBody[i].split(",");
+            for(int j=0; j<splitedFirstMapBody.length; j++){
+                finalMapBody[i][j] = Integer.parseInt(splitedSecondMapBody[j]);
             }
         }
+        return finalMapBody;
     }
 
     public  void loadMapGame(MapGame mapGame) {
