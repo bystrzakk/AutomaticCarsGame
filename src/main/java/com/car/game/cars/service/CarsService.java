@@ -33,12 +33,13 @@ import static com.car.game.common.enums.Move.TURN_LEFT;
 public class CarsService {
 
     private CarRepository carRepository;
+    private CarsAssembler carsAssembler;
 
     @Transactional
     public boolean addCar(CarDto carDto){
         if( !exist(carDto)){
             Car car = new Car();
-            CarPk carPk = getCarPk(carDto);
+            CarPk carPk = carsAssembler.getCarPk(carDto);
             car.setCarPk(carPk);
             carRepository.save(car);
             log.info("New " + carDto.getName() + " car was stored in database");
@@ -49,7 +50,7 @@ public class CarsService {
     }
 
     private boolean exist(CarDto carDto){
-        CarPk carPk = getCarPk(carDto);
+        CarPk carPk = carsAssembler.getCarPk(carDto);
         Car car = carRepository.findCarByCarPk(carPk);
         if(car == null){
             return false;
@@ -62,7 +63,7 @@ public class CarsService {
     }
 
     public boolean deleteCar(CarDto carDto) {
-        CarPk carPk = getCarPk(carDto);
+        CarPk carPk = carsAssembler.getCarPk(carDto);
         boolean exist = carRepository.existsById(carPk);
         if(exist){
             carRepository.deleteById(carPk);
@@ -73,19 +74,7 @@ public class CarsService {
         return false;
     }
 
-    private CarPk getCarPk(CarDto carDto) {
-        CarPk carPk = new CarPk();
-        carPk.setName(carDto.getName());
-        carPk.setType(carDto.getType());
-        return carPk;
-    }
 
-    private CarPk getCarPk(String name , CarType carType) {
-        CarPk carPk = new CarPk();
-        carPk.setName(name);
-        carPk.setType(carType);
-        return carPk;
-    }
 
 
     @Transactional
@@ -103,7 +92,7 @@ public class CarsService {
 
     private void updateCarInDB(CarSetup carSetup){
         Car car = new Car();
-        CarPk carPk = getCarPk(carSetup.getCar().getName(), carSetup.getCar().getType());
+        CarPk carPk = carsAssembler.getCarPk(carSetup.getCar().getName(), carSetup.getCar().getType());
         car.setCarPk(carPk);
         car.setMapName(carSetup.getMapName());
         carRepository.save(car);

@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class CarSetup {
-    private CarDto car;
-    private String mapName;
-    private Position position;
+    private @NotNull CarDto car;
+    private @NotNull String mapName;
+    private @NotNull Position position;
 }

@@ -27,8 +27,7 @@ public class MapService {
         if (!this.isMapExist(name) && correctMapBodyFormat(body)) {
             MapGame mapGame = new MapGame();
             mapGame.setName(name);
-            //todo: zmienić na body
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
+            mapGame.setMapBody(body);
             mapGame.setUsed(false);
             mapGame.setDeleted(false);
             mapRepository.save(mapGame);
@@ -36,35 +35,29 @@ public class MapService {
             log.info("New map `" + mapGame.getName() + "` was stored in Database");
             return true;
         }
-
         log.warning("The map `" + name + "` is curently added");
         return false;
     }
 
     public boolean isMapExist(String name) {
         MapGame mapGame = mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(name);
-
         if (mapGame == null) {
             return false;
         }
-
         return true;
     }
 
     public boolean startGame(String mapName){
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         if(actualInformation.getActualMapName()!=null){
-            log.info("nie mozna uruchomic nowej gry, obecnie jest aktywna mapa :"+ actualInformation.getActualMapName());
+            log.info("Can not run new game, curently run map :"+ actualInformation.getActualMapName());
             return false;
         }
-
         MapGame mapGame = mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName);
-
         if ( mapGame ==null){
-            log.info("bark mapy");
+            log.info("The map was not found.");
             return false;
         }
-
         actualInformation.setActualMapName(mapName, mapGame);
         System.out.println(actualInformation.getConcuretnHashMapGame());
         mapGame.setUsed(true);
