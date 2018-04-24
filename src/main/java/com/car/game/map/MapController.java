@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @NoArgsConstructor
@@ -34,22 +32,21 @@ public class MapController {
         return mapService.addNewMap(name,body);
     }
 
-    @PostMapping(value = "/start")
-    @ApiOperation("Start game")
+    @PostMapping(value = "/select")
+    @ApiOperation("Select the map")
     @ResponseStatus(OK)
-    public Boolean startGame(@RequestParam(value = "name") String name) {
-        return mapService.startGame(name);
-
+    public Boolean selectMap(@RequestParam(value = "name") String name) {
+        return mapService.selectMap(name);
     }
 
-    @PostMapping(value = "/stop")
-    @ApiOperation("Stop game")
+    @PostMapping(value = "/unselect")
+    @ApiOperation("Unselect the game")
     @ResponseStatus(OK)
-    public void stopGame(){
-         mapService.stopGame();
+    public void unselectMap(){
+         mapService.unselectMap();
     }
 
-    @PostMapping(value = "/map/delete")
+    @DeleteMapping(value = "/map")
     @ApiOperation("Delete map")
     @ResponseStatus(NO_CONTENT)
     public Boolean deleteMap(@RequestParam(value = "name") String name) {

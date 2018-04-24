@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
 import java.util.Arrays;
+import java.util.List;
 
 @Log
 @Service
@@ -45,7 +46,7 @@ public class MapService {
         return mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName) == null ?  false : true;
     }
 
-    public boolean startGame(String mapName) {
+    public boolean selectMap(String mapName) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         if (actualInformation.getActualMapName() != null) {
             log.warning("You can't launch a new game, the selected map: " + actualInformation.getActualMapName() + " is currently in use.");
@@ -66,7 +67,7 @@ public class MapService {
         return true;
     }
 
-    public void stopGame() {
+    public void unselectMap() {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         actualInformation.setActualMapName(null);
         actualInformation.setConcuretnHashMapGame(null);
