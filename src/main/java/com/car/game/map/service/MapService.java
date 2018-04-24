@@ -22,8 +22,8 @@ public class MapService {
         return mapRepository.findAll();
     }
 
-    public String addNewMap(String name, String body) {
-        if (!this.isMapExist(name)) {
+    public boolean addNewMap(String name, String body) {
+        if (!this.isMapExist(name) && correctMapBodyFormat(body)) {
             MapGame mapGame = new MapGame();
             mapGame.setName(name);
             //todo: zmienić na body
@@ -33,11 +33,11 @@ public class MapService {
             mapRepository.save(mapGame);
 
             log.info("New map `" + mapGame.getName() + "` was stored in Database");
-            return "Success";
+            return true;
         }
 
         log.warning("The map `" + name + "` is curently added");
-        return "Map already exist";
+        return false;
     }
 
     public boolean isMapExist(String name) {
@@ -100,5 +100,12 @@ public class MapService {
         }
         log.info("Map was deleted.");
         return true;
+    }
+    
+    private boolean correctMapBodyFormat(String mapBody){
+        Integer splitedNumbers[] = Arrays.stream(mapBody.split(";|,")).map(Integer::parseInt).toArray(Integer[]::new);
+        double squareOfSize = Math.sqrt(splitedNumbers.length);
+
+        return (squareOfSize - Math.floor(squareOfSize)) == 0 ? true : false;
     }
 }
