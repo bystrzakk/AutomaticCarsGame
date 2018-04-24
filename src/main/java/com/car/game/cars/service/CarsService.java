@@ -33,12 +33,13 @@ import static com.car.game.common.enums.Move.TURN_LEFT;
 public class CarsService {
 
     private CarRepository carRepository;
+    private CarsAssembler carsAssembler;
 
     @Transactional
     public boolean addCar(CarDto carDto){
         if( !exist(carDto)){
             Car car = new Car();
-            CarPk carPk = getCarPk(carDto);
+            CarPk carPk = carsAssembler.getCarPk(carDto);
             car.setCarPk(carPk);
             carRepository.save(car);
             log.info("New " + carDto.getName() + " car was stored in database");
@@ -49,12 +50,9 @@ public class CarsService {
     }
 
     private boolean exist(CarDto carDto){
-        CarPk carPk = getCarPk(carDto);
+        CarPk carPk = carsAssembler.getCarPk(carDto);
         Car car = carRepository.findCarByCarPk(carPk);
-        if(car == null){
-            return false;
-        }
-        return true;
+        return (car == null) ? false : true;
     }
 
     public List<Car> getCars(){
@@ -62,7 +60,7 @@ public class CarsService {
     }
 
     public boolean deleteCar(CarDto carDto) {
-        CarPk carPk = getCarPk(carDto);
+        CarPk carPk = carsAssembler.getCarPk(carDto);
         boolean exist = carRepository.existsById(carPk);
         if(exist){
             carRepository.deleteById(carPk);
@@ -73,43 +71,41 @@ public class CarsService {
         return false;
     }
 
-    private CarPk getCarPk(CarDto carDto) {
-        CarPk carPk = new CarPk();
-        carPk.setName(carDto.getName());
-        carPk.setType(carDto.getType());
-        return carPk;
-    }
-
-    private CarPk getCarPk(String name , CarType carType) {
-        CarPk carPk = new CarPk();
-        carPk.setName(name);
-        carPk.setType(carType);
-        return carPk;
-    }
-
-
     @Transactional
-    public void addCarToMap(CarSetup carSetup) {
+    public boolean addCarToMap(CarSetup carSetup) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         MapInformation mapInformation = actualInformation.getMapInformation(carSetup.getPosition());
         Boolean isWall = actualInformation.isWall(mapInformation);
         Boolean isCar = actualInformation.isCar(mapInformation);
-        if(isCar&&isWall&&exist(carSetup.getCar())){
+        if(isWall||isCar||exist(carSetup.getCar())){
+            log.info("Cant place car on given field");
+            return false;
+        }
+        if(!checkPositionIsOnMap(carSetup.getPosition())){
+            log.info("Out of map");
+            return false;
+        }
             log.info("Car was added to game");
             updateCarInDB(carSetup);
+            return true;
+    }
+
+    private boolean checkPositionIsOnMap(Position position){
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
+        if(actualInformation.getMapSize()<=position.getX()||actualInformation.getMapSize()<=position.getY()){
+            return false;
         }
-        log.info("Cant place car on given field");
+        return true;
     }
 
     private void updateCarInDB(CarSetup carSetup){
         Car car = new Car();
-        CarPk carPk = getCarPk(carSetup.getCar().getName(), carSetup.getCar().getType());
+        CarPk carPk = carsAssembler.getCarPk(carSetup.getCar());
         car.setCarPk(carPk);
         car.setMapName(carSetup.getMapName());
         carRepository.save(car);
         log.info("Car was added to game");
     }
-
 
     public void moveCar(CarMoveDto carMoveDto) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
@@ -158,7 +154,6 @@ public class CarsService {
                                 MapInformation mapInformation){
 
         ActualInformation actualInformation = ActualInformation.getActualInformation();
-
 
         if(NORMAL == enemyCar.getType() && TRUCK == car.getType()){
             // DEAD ENEMY
@@ -224,7 +219,6 @@ public class CarsService {
 
         return futureDirection;
     }
-
 
     public Position checkFuturePosition(Direction direction, Position position){
         ActualInformation actualInformation = ActualInformation.getActualInformation();
