@@ -7,6 +7,7 @@ import com.car.game.common.enums.Direction;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarPk;
 import com.car.game.common.repository.CarRepository;
+import com.car.game.game.MapInformation;
 import com.car.game.game.Position;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,11 +25,12 @@ public class CarsServiceTest {
 
     private CarRepository repository;
     private CarsService carsService;
+    private CarsAssembler carsAssembler;
 
     @Before
     public void setUp() throws Exception {
         repository = mock(CarRepository.class);
-        carsService = new CarsService(repository);
+        carsService = new CarsService(repository,carsAssembler);
     }
 
     @Test
@@ -56,7 +58,8 @@ public class CarsServiceTest {
 
     @Test
     public void shouldReturnNullForNoCriteria() throws Exception{
-        final Position futurePosition = carsService.checkFuturePosition(Direction.E, new Position(0, 0));
+
+        final Position futurePosition = carsService.checkFuturePosition(new MapInformation(), new Position(0, 0));
 
         assertThat(futurePosition).isEqualTo(null);
     }
