@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
 import java.util.Arrays;
+import java.util.List;
 
 @Log
 @Service
@@ -27,8 +28,7 @@ public class MapService {
         if (!this.isMapExist(name) && correctMapBodyFormat(body)) {
             MapGame mapGame = new MapGame();
             mapGame.setName(name);
-            //todo: zmienić na body
-            mapGame.setMapBody("1,0,1,0,1,0,0,1,0");
+            mapGame.setMapBody(body);
             mapGame.setUsed(false);
             mapGame.setDeleted(false);
             mapRepository.save(mapGame);

@@ -3,6 +3,7 @@ package com.car.game.map;
 import com.car.game.common.model.MapGame;
 import com.car.game.map.service.MapService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class MapController {
     @ApiOperation("Add map")
     @ResponseStatus(CREATED)
     public boolean addNewMap(@RequestParam(value = "name") String name,
-                             @RequestParam(value = "body") String body){
+                             @RequestParam(value = "body") @ApiParam(value = "Map body in CSV format") String body){
         return mapService.addNewMap(name,body);
     }
 
@@ -40,7 +41,6 @@ public class MapController {
     @ResponseStatus(OK)
     public Boolean startGame(@RequestParam(value = "name") String name){
         return mapService.startGame(name);
-
     }
 
     @PostMapping(value = "/stop")
