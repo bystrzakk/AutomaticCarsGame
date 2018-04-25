@@ -60,7 +60,7 @@ public class CarsService {
         return carRepository.findAll();
     }
 
-    public List<String> getCarHistory(String name){
+    public List<Move> getCarHistory(String name){
         return carHistoryrepository.findAllCarMovements(name);
     }
 

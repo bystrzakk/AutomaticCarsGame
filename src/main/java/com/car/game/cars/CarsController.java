@@ -4,6 +4,7 @@ import com.car.game.cars.dto.CarDto;
 import com.car.game.cars.dto.CarMoveDto;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.service.CarsService;
+import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -60,7 +61,7 @@ public class CarsController {
     @GetMapping(value = "/car/history")
     @ApiOperation("Get movements history for given car")
     @ResponseStatus(OK)
-    public List<String> getCarHistory(@RequestParam(value = "carName") String carName){
+    public List<Move> getCarHistory(@RequestParam(value = "carName") String carName){
         return carsService.getCarHistory(carName);
     }
 }
