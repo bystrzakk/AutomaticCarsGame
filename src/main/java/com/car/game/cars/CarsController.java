@@ -1,7 +1,7 @@
 package com.car.game.cars;
 
 import com.car.game.cars.dto.CarDto;
-import com.car.game.cars.dto.CarMoveDto;
+import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.service.CarsService;
 import com.car.game.common.model.Car;
@@ -49,14 +49,13 @@ public class CarsController {
     @ApiOperation("Add car to game controller")
     @ResponseStatus(OK)
     public boolean putCarInMap(@RequestBody CarSetup carSetup){
-
         return carsService.addCarToMap(carSetup);
     }
 
     @PostMapping(value = "/car/move")
     @ApiOperation("Move car on game map controller")
     @ResponseStatus(OK)
-    public void moveCarOnMap(@RequestBody CarMoveDto carMove){
+    public void moveCarOnMap(@RequestBody CarMove carMove){
         carsService.moveCar(carMove);
     }
 }

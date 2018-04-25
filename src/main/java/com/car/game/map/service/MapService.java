@@ -14,12 +14,16 @@ import java.util.List;
 
 @Log
 @Service
-@NoArgsConstructor
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MapService {
 
     private MapAssembler mapAssembler;
     private MapRepository mapRepository;
+    private ActualInformation actualInformation = ActualInformation.getActualInformation();
+
+    public MapService(MapAssembler mapAssembler, MapRepository mapRepository) {
+        this.mapAssembler = mapAssembler;
+        this.mapRepository = mapRepository;
+    }
 
     public List<MapGame> getAllMaps() {
         return mapRepository.findAll();
@@ -40,9 +44,8 @@ public class MapService {
     }
 
     public boolean selectMap(String mapName) {
-        ActualInformation actualInformation = ActualInformation.getActualInformation();
-        if (actualInformation.getActualMapName() != null) {
-            log.warning("You can't launch a new game, the selected map: " + actualInformation.getActualMapName() + " is currently in use.");
+        if (actualInformation.getMapByName(mapName) != null) {
+            log.warning("You can't launch a new game, the selected map: " + mapName+ " is currently in use.");
             return false;
         }
         MapGame mapGame = mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName);
@@ -52,17 +55,13 @@ public class MapService {
         }
 
         mapGame.setUsed(true);
-        actualInformation.setActualMapName(mapName, mapGame);
         mapRepository.save(mapGame);
-
-        log.info(actualInformation.getConcuretnHashMapGame().toString());
+        actualInformation.loadMapToGame(mapGame);
         return true;
     }
 
-    public void unselectMap() {
-        ActualInformation actualInformation = ActualInformation.getActualInformation();
-        actualInformation.setActualMapName(null);
-        actualInformation.setConcuretnHashMapGame(null);
+    public void unselectMap(String name) {
+        actualInformation.unloadMap(name);
     }
 
     public boolean deleteMap(String mapName) {
@@ -73,9 +72,8 @@ public class MapService {
             return false;
         }
 
-        ActualInformation actualInformation = ActualInformation.getActualInformation();
 
-        if (actualInformation.getActualMapName() == mapName) {
+        if (actualInformation.getMapByName(mapName)==null) {
             log.warning("You can't delete the map: " + mapName + ". Is currently in use.");
             return false;
         }

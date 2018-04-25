@@ -1,24 +1,24 @@
 package com.car.game.configuration;
 
 import com.car.game.common.enums.Direction;
-import com.car.game.game.MapInformation;
-import com.car.game.game.Position;
+import com.car.game.game.FieldlInformation;
+import com.car.game.game.FieldPosition;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MockMethod {
 
-    protected ConcurrentHashMap<Position, MapInformation> getMap(){
-        ConcurrentHashMap<Position, MapInformation> map = new ConcurrentHashMap<>();
-        map.put(new Position(0,0), getMapInformation());
+    protected ConcurrentHashMap<FieldPosition, FieldlInformation> getMap(){
+        ConcurrentHashMap<FieldPosition, FieldlInformation> map = new ConcurrentHashMap<>();
+        map.put(new FieldPosition(0,0), getMapInformation());
         return map;
     }
 
-    protected MapInformation getMapInformation(){
-        MapInformation mapInformation = new MapInformation();
-        mapInformation.setIsWall(Boolean.FALSE);
-        mapInformation.setDirection(Direction.N);
-        mapInformation.setIsCrashed(Boolean.FALSE);
-        return mapInformation;
+    protected FieldlInformation getMapInformation(){
+        FieldlInformation fieldlInformation = new FieldlInformation();
+        fieldlInformation.setIsWall(Boolean.FALSE);
+        fieldlInformation.setDirection(Direction.N);
+        fieldlInformation.setIsCrashed(Boolean.FALSE);
+        return fieldlInformation;
     }
 }

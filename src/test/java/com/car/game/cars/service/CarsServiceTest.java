@@ -7,8 +7,8 @@ import com.car.game.common.enums.CarType;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarPk;
 import com.car.game.common.repository.CarRepository;
-import com.car.game.game.MapInformation;
-import com.car.game.game.Position;
+import com.car.game.game.FieldPosition;
+import com.car.game.game.FieldlInformation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,9 +59,9 @@ public class CarsServiceTest {
     @Test
     public void shouldReturnNullForNoCriteria() throws Exception{
 
-        final Position futurePosition = carsService.checkFuturePosition(new MapInformation(), new Position(0, 0));
+        final FieldPosition futureFieldPosition = carsService.checkFuturePosition(new FieldlInformation(), new FieldPosition(0, 0));
 
-        assertThat(futurePosition).isEqualTo(null);
+        assertThat(futureFieldPosition).isEqualTo(null);
     }
 
     @Test

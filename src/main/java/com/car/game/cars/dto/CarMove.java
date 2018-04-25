@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CarMoveDto {
+public class CarMove {
      private CarPk car;
      private Move move;
+     private String mapName;
 }

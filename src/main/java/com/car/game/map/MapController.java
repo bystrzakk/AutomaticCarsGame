@@ -44,8 +44,8 @@ public class MapController {
     @PostMapping(value = "/unselect")
     @ApiOperation("Unselect the game")
     @ResponseStatus(OK)
-    public void unselectMap(){
-         mapService.unselectMap();
+    public void unselectMap(@RequestParam(value = "name") String name){
+         mapService.unselectMap(name);
     }
 
     @DeleteMapping(value = "/map")
