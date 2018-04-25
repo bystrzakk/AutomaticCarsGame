@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,8 +16,11 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Car {
+
     @EmbeddedId
     private CarPk carPk;
     private String mapName;
+    @OneToMany(mappedBy = "car")
+    private List<CarHistory> movements;
     private boolean isCrashed;
 }

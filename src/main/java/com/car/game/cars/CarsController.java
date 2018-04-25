@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @NoArgsConstructor
@@ -49,7 +47,6 @@ public class CarsController {
     @ApiOperation("Add car to game controller")
     @ResponseStatus(OK)
     public boolean putCarInMap(@RequestBody CarSetup carSetup){
-
         return carsService.addCarToMap(carSetup);
     }
 
@@ -58,5 +55,12 @@ public class CarsController {
     @ResponseStatus(OK)
     public void moveCarOnMap(@RequestBody CarMoveDto carMove){
         carsService.moveCar(carMove);
+    }
+
+    @GetMapping(value = "/car/history")
+    @ApiOperation("Get movements history for given car")
+    @ResponseStatus(OK)
+    public List<String> getCarHistory(@RequestParam(value = "carName") String carName){
+        return carsService.getCarHistory(carName);
     }
 }

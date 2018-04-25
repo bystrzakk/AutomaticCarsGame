@@ -7,6 +7,7 @@ import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarPk;
+import com.car.game.common.repository.CarHistoryrepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.game.ActualInformation;
 import com.car.game.game.MapInformation;
@@ -32,6 +33,7 @@ import static com.car.game.common.enums.Move.TURN_LEFT;
 public class CarsService {
 
     private CarRepository carRepository;
+    private CarHistoryrepository carHistoryrepository;
     private CarsAssembler carsAssembler;
 
     @Transactional
@@ -56,6 +58,10 @@ public class CarsService {
 
     public List<Car> getCars(){
         return carRepository.findAll();
+    }
+
+    public List<String> getCarHistory(String name){
+        return carHistoryrepository.findAllCarMovements(name);
     }
 
     public boolean deleteCar(CarDto carDto) {
