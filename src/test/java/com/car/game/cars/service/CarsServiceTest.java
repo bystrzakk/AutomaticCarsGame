@@ -3,9 +3,11 @@ package com.car.game.cars.service;
 
 import com.car.game.cars.dto.CarDto;
 import com.car.game.common.enums.CarType;
-
+import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
+import com.car.game.common.model.CarHistory;
 import com.car.game.common.model.CarPk;
+import com.car.game.common.repository.CarHistoryrepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.game.FieldPosition;
 import com.car.game.game.FieldlInformation;
@@ -16,21 +18,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class CarsServiceTest {
 
     private CarRepository repository;
     private CarsService carsService;
+    private CarHistoryrepository carHistoryrepository;
     private CarsAssembler carsAssembler;
 
     @Before
     public void setUp() throws Exception {
         repository = mock(CarRepository.class);
-        carsService = new CarsService(repository,carsAssembler);
+        carsService = new CarsService(repository, carHistoryrepository, carsAssembler);
     }
 
     @Test
@@ -85,11 +88,15 @@ public class CarsServiceTest {
     }
 
     private Car getCar(){
-        return new Car(getCarPk(),"testMapName",false);
+        return new Car(getCarPk(),"testMapName", null,false);
     }
 
     private CarPk getCarPk(){
         return new CarPk("testCarName", CarType.NORMAL);
+    }
+
+    private List<CarHistory> getCarMovements(){
+        return Arrays.asList(new CarHistory(1l, getCar(), Move.FORWARD));
     }
 
     private List<Car> getCars(){

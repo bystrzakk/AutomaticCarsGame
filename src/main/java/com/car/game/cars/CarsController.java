@@ -4,6 +4,7 @@ import com.car.game.cars.dto.CarDto;
 import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.service.CarsService;
+import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -13,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @NoArgsConstructor
@@ -57,5 +56,12 @@ public class CarsController {
     @ResponseStatus(OK)
     public void moveCarOnMap(@RequestBody CarMove carMove){
         carsService.moveCar(carMove);
+    }
+
+    @GetMapping(value = "/car/history")
+    @ApiOperation("Get movements history for given car")
+    @ResponseStatus(OK)
+    public List<Move> getCarHistory(@RequestParam(value = "carName") String carName){
+        return carsService.getCarHistory(carName);
     }
 }

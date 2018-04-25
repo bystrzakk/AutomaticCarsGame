@@ -5,9 +5,9 @@ import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.service.CarsService;
 import com.car.game.common.enums.CarType;
-
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.CarPk;
+import com.car.game.common.repository.CarHistoryrepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.configuration.TestConfig;
 import com.car.game.game.ActualInformation;
@@ -15,13 +15,13 @@ import com.car.game.game.ActualInformation;
 import com.car.game.game.FieldPosition;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 
 
@@ -33,9 +33,13 @@ public class CarsControllerTest extends TestConfig {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private CarHistoryrepository carHistoryrepository;
+
     @Before
     public void setup() throws Exception {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
+        this.carHistoryrepository.deleteAllInBatch();
         this.carRepository.deleteAllInBatch();
         this.carsService.addCar(getCarDto());
     }
@@ -54,6 +58,13 @@ public class CarsControllerTest extends TestConfig {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void testGetCarHistory() throws Exception {
+        mockMvc.perform(get("/car/history").param("carName", "BMW"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test

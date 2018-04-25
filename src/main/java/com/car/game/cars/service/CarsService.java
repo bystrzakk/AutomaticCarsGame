@@ -6,7 +6,9 @@ import com.car.game.cars.dto.CarSetup;
 import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
+import com.car.game.common.model.CarHistory;
 import com.car.game.common.model.CarPk;
+import com.car.game.common.repository.CarHistoryrepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.game.ActualInformation;
 import com.car.game.game.FieldPosition;
@@ -29,13 +31,15 @@ import static com.car.game.common.enums.Move.TURN_LEFT;
 public class CarsService {
 
     private CarRepository carRepository;
+    private CarHistoryrepository carHistoryrepository;
     private CarsAssembler carsAssembler;
     private ActualInformation actualInformation = ActualInformation.getActualInformation();
 
     @Autowired
-    public CarsService(CarRepository carRepository, CarsAssembler carsAssembler) {
+    public CarsService(CarRepository carRepository, CarsAssembler carsAssembler, CarHistoryrepository carHistoryrepository) {
         this.carRepository = carRepository;
         this.carsAssembler = carsAssembler;
+        this.carHistoryrepository = carHistoryrepository;
     }
 
     @Transactional
@@ -60,6 +64,10 @@ public class CarsService {
 
     public List<Car> getCars(){
         return carRepository.findAll();
+    }
+
+    public List<Move> getCarHistory(String name){
+        return carHistoryrepository.findAllCarMovements(name);
     }
 
     public boolean deleteCar(CarDto carDto) {
@@ -120,6 +128,21 @@ public class CarsService {
         log.info("Car was added to game");
     }
 
+    private CarHistory prepareCarHistoryMove(Move move, CarMove carMove){
+        CarHistory carHistoryMove = new CarHistory();
+        Car car = new Car();
+        car.setCarPk(carMove.getCar());
+        carHistoryMove.setMove(move);
+        carHistoryMove.setCar(car);
+
+        return carHistoryMove;
+    }
+
+    private void saveCarHisotryMovement(Move move, CarMove carMove){
+        CarHistory carHistory = prepareCarHistoryMove(move, carMove);
+        carHistoryrepository.save(carHistory);
+    }
+
     public void moveCar(CarMove carMove) {
         FieldlInformation fieldlInformation = actualInformation.getFieldInformationByCar(carMove);
         FieldPosition fieldPosition = actualInformation.getCarPositionByCar(carMove);
@@ -131,8 +154,10 @@ public class CarsService {
         if(carMove.getMove()!=FORWARD){
             fieldlInformation.setDirection(updateDirection(FORWARD, fieldlInformation));
             map.getMap().replace(fieldPosition, fieldlInformation);
+            saveCarHisotryMovement(carMove.getMove(), carMove);
             return;
         }
+        saveCarHisotryMovement(FORWARD, carMove);
 
         FieldPosition futureFieldPosition = checkFuturePosition(fieldlInformation, fieldPosition,map.getSize());
         if(futureFieldPosition == null){

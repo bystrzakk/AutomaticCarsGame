@@ -1,7 +1,10 @@
 package com.car.game.common.model;
 
 import com.car.game.common.enums.CarType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
