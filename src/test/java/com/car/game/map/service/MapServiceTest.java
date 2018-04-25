@@ -98,7 +98,7 @@ public class MapServiceTest extends MockMethod{
 
    @Test
    public void shouldReturnTrueIfMapRemoved() throws Exception{
-       ActualInformation.setActualMapName(null);
+       ActualInformation actualInformation = ActualInformation.getActualInformation();
        when(mapRepository.findByName(anyString())).thenReturn(getMapGame(false, false));
        final boolean isDeletedMap = mapService.deleteMap("testMapName");
 
