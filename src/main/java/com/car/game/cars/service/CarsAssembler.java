@@ -1,16 +1,10 @@
 package com.car.game.cars.service;
 
 import com.car.game.cars.dto.CarDto;
-import com.car.game.common.enums.CarType;
 import com.car.game.common.model.CarPk;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@Component
 public class CarsAssembler {
 
     public CarPk getCarPk(CarDto carDto) {

@@ -3,7 +3,6 @@ package com.car.game.cars.service;
 import com.car.game.cars.dto.CarDto;
 import com.car.game.cars.dto.CarMoveDto;
 import com.car.game.cars.dto.CarSetup;
-import com.car.game.common.enums.CarType;
 import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
@@ -119,7 +118,7 @@ public class CarsService {
             return;
         }
 
-        Position futurePosition = checkFuturePosition(mapInformation.getDirection(),position);
+        Position futurePosition = checkFuturePosition(mapInformation,position);
         if(futurePosition == null){
             log.warning("Out of the map!");
             return;
@@ -220,24 +219,25 @@ public class CarsService {
         return futureDirection;
     }
 
-    public Position checkFuturePosition(Direction direction, Position position){
+    public Position checkFuturePosition(MapInformation mapInformation, Position position){
         ActualInformation actualInformation = ActualInformation.getActualInformation();
+        int distance = mapInformation.getCar().getType()==RACING?2:1;
         Position positionAfterMove ;
-        switch (direction){
+        switch (mapInformation.getDirection()){
             case E:{
-                positionAfterMove = new Position(position.getX()+1,position.getY());
+                positionAfterMove = new Position(position.getX()+distance,position.getY());
                 break;
             }
             case N:{
-                positionAfterMove = new Position(position.getX(),position.getY()+1);
+                positionAfterMove = new Position(position.getX(),position.getY()+distance);
                 break;
             }
             case W:{
-                positionAfterMove = new Position(position.getX()-1,position.getY());
+                positionAfterMove = new Position(position.getX()-distance,position.getY());
                 break;
             }
             case S:{
-                positionAfterMove = new Position(position.getX(),position.getY()-1);
+                positionAfterMove = new Position(position.getX(),position.getY()-distance);
                 break;
             }
             default:{

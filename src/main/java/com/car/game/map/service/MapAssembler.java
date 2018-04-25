@@ -1,14 +1,9 @@
 package com.car.game.map.service;
 
 import com.car.game.common.model.MapGame;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@Component
 public class MapAssembler {
 
     public MapGame getMapGame(String mapName, String body){
