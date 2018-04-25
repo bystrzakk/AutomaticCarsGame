@@ -1,5 +1,6 @@
 package com.car.game.common.model;
 
+import com.car.game.common.enums.Move;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class CarHistory {
             @JoinColumn(name = "type")
     })
     private Car car;
-    private String move;
+    @Enumerated(EnumType.STRING)
+    private Move move;
 
 }

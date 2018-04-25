@@ -3,6 +3,7 @@ package com.car.game.cars.service;
 
 import com.car.game.cars.dto.CarDto;
 import com.car.game.common.enums.CarType;
+import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarHistory;
 import com.car.game.common.model.CarPk;
@@ -87,7 +88,7 @@ public class CarsServiceTest {
     }
 
     private Car getCar(){
-        return new Car(getCarPk(),"testMapName", getCarMovements(),false);
+        return new Car(getCarPk(),"testMapName", null,false);
     }
 
     private CarPk getCarPk(){
@@ -95,7 +96,7 @@ public class CarsServiceTest {
     }
 
     private List<CarHistory> getCarMovements(){
-        return Arrays.asList(new CarHistory(1l, getCar(), "FORWARD"));
+        return Arrays.asList(new CarHistory(1l, getCar(), Move.FORWARD));
     }
 
     private List<Car> getCars(){
