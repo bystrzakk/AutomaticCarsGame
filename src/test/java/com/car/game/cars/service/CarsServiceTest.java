@@ -3,7 +3,7 @@ package com.car.game.cars.service;
 
 import com.car.game.cars.dto.CarDto;
 import com.car.game.common.enums.CarType;
-import com.car.game.common.enums.Direction;
+
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarPk;
 import com.car.game.common.repository.CarRepository;
@@ -45,7 +45,7 @@ public class CarsServiceTest {
     public void shouldReturnTrueWhenAddingNewCar() throws Exception{
         final boolean isCarAdded = carsService.addCar(getCarDto());
 
-        assertThat(isCarAdded).isEqualTo(true);
+        assertThat(isCarAdded).isTrue();
     }
 
     @Test
@@ -53,7 +53,7 @@ public class CarsServiceTest {
         when(repository.findCarByCarPk(any())).thenReturn(getCar());
         final boolean isCarAdded = carsService.addCar(getCarDto());
 
-        assertThat(isCarAdded).isEqualTo(false);
+        assertThat(isCarAdded).isFalse();
     }
 
     @Test

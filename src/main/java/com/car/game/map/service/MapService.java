@@ -35,7 +35,7 @@ public class MapService {
         return false;
     }
 
-    private boolean isMapExist(String mapName) {
+    protected boolean isMapExist(String mapName) {
         return mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName) == null ?  false : true;
     }
 
