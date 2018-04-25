@@ -138,7 +138,7 @@ public class CarsService {
         return carHistoryMove;
     }
 
-    private void saveCarHisotryMovement(Move move, CarMove carMove){
+    private void saveCarHistoryMove(Move move, CarMove carMove){
         CarHistory carHistory = prepareCarHistoryMove(move, carMove);
         carHistoryrepository.save(carHistory);
     }
@@ -154,10 +154,10 @@ public class CarsService {
         if(carMove.getMove()!=FORWARD){
             fieldlInformation.setDirection(updateDirection(FORWARD, fieldlInformation));
             map.getMap().replace(fieldPosition, fieldlInformation);
-            saveCarHisotryMovement(carMove.getMove(), carMove);
+            saveCarHistoryMove(carMove.getMove(), carMove);
             return;
         }
-        saveCarHisotryMovement(FORWARD, carMove);
+        saveCarHistoryMove(FORWARD, carMove);
 
         FieldPosition futureFieldPosition = checkFuturePosition(fieldlInformation, fieldPosition,map.getSize());
         if(futureFieldPosition == null){
