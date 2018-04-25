@@ -1,12 +1,12 @@
 package com.car.game.cars;
 
-import com.car.game.cars.dto.CarDto;
+import com.car.game.cars.dto.CarInformation;
 import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.service.CarsService;
 import com.car.game.common.enums.CarType;
+
 import com.car.game.common.enums.Move;
-import com.car.game.common.model.CarPk;
 import com.car.game.common.repository.CarHistoryrepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.configuration.TestConfig;
@@ -41,7 +41,7 @@ public class CarsControllerTest extends TestConfig {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
         this.carHistoryrepository.deleteAllInBatch();
         this.carRepository.deleteAllInBatch();
-        this.carsService.addCar(getCarDto());
+        //this.carsService.addCar(getCarDto());
     }
 
     @Test
@@ -77,8 +77,8 @@ public class CarsControllerTest extends TestConfig {
 
     @Test
     public void testPutCarInMap() throws Exception {
-        ActualInformation.setActualMapName("testMap");
-        ActualInformation.setConcuretnHashMapGame(getMap());
+//        ActualInformation.setActualMapName("testMap");
+//        ActualInformation.setConcuretnHashMapGame(getMap());
 
         mockMvc.perform(post("/car/first/setup")
                 .contentType(contentType)
@@ -97,8 +97,8 @@ public class CarsControllerTest extends TestConfig {
 //                .andExpect(status().isOk());
 //    }
 
-    private CarDto getCarDto(){
-        return new CarDto("testCarName", CarType.NORMAL);
+    private CarInformation getCarDto(){
+        return new CarInformation("testCarName", CarType.NORMAL);
     }
 
     private CarSetup getCarSetup(){
@@ -106,11 +106,7 @@ public class CarsControllerTest extends TestConfig {
     }
 
     private CarMove getCarMove(){
-        return new CarMove(getCarPk(),getMove());
-    }
-
-    private CarPk getCarPk(){
-        return new CarPk("testCarName",CarType.NORMAL);
+        return new CarMove();
     }
 
     private Move getMove(){

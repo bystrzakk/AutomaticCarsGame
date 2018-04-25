@@ -1,24 +1,23 @@
 package com.car.game.common.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.car.game.common.enums.CarType;
+import lombok.*;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Car {
 
-    @EmbeddedId
-    private CarPk carPk;
+    @Id
+    private String name;
+    private CarType type;
     private String mapName;
     @OneToMany(mappedBy = "car")
     private List<CarHistory> movements;

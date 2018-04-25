@@ -1,7 +1,7 @@
 package com.car.game.cars.dto;
 
+import com.car.game.common.enums.CarType;
 import com.car.game.common.enums.Move;
-import com.car.game.common.model.CarPk;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CarMove {
-     private CarPk car;
+     private String name;
+     private CarType type;
      private Move move;
      private String mapName;
 }

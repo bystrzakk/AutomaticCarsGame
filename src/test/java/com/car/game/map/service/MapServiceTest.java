@@ -64,7 +64,7 @@ public class MapServiceTest extends MockMethod{
 
     @Test
     public void shouldReturnTrueForSelectedMap() throws Exception{
-        ActualInformation.setActualMapName(null);
+       // ActualInformation.setActualMapName(null);
         when(mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(anyString())).thenReturn(getMapGame(false, false));
         final boolean selectMap = mapService.selectMap("testMapName");
 
@@ -81,7 +81,7 @@ public class MapServiceTest extends MockMethod{
 
     @Test
     public void shouldReturnFalseForSelectedMapIfMapInUse() throws Exception{
-        ActualInformation.setActualMapName("testMap");
+        //ActualInformation.setActualMapName("testMap");
         when(mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(anyString())).thenReturn(null);
         final boolean selectMap = mapService.selectMap("testMapName");
 
@@ -107,8 +107,8 @@ public class MapServiceTest extends MockMethod{
 
     @Test
     public void shouldReturnFalseForRemoveIfMapInUse() throws Exception{
-        ActualInformation.setConcuretnHashMapGame(getMap());
-        ActualInformation.setActualMapName("testMapName");
+       // ActualInformation.setConcuretnHashMapGame(getMap());
+        //ActualInformation.setActualMapName("testMapName");
         when(mapRepository.findByName(anyString())).thenReturn(getMapGame(true, false));
         final boolean isDeletedMap = mapService.deleteMap("testMapName");
 

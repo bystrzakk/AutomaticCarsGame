@@ -1,14 +1,12 @@
 package com.car.game.game;
 
 import com.car.game.cars.dto.CarMove;
-import com.car.game.common.model.CarPk;
 import com.car.game.common.model.MapGame;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Log
@@ -34,7 +32,7 @@ public class ActualInformation {
         FieldlInformation fieldlInformation = map.getMap()
                 .entrySet()
                 .stream()
-                .filter(a->a.getValue().getCar()==car.getCar())
+                .filter(a->a.getValue().getCarName()==car.getName())
                 .map(a->a.getValue())
                 .findFirst()
                 .get();
@@ -49,7 +47,7 @@ public class ActualInformation {
         FieldPosition fieldPosition = map.getMap()
                 .entrySet()
                 .stream()
-                .filter(a->a.getValue().getCar()==car.getCar())
+                .filter(a->a.getValue().getCarName()==car.getName())
                 .map(a->a.getKey())
                 .findFirst()
                 .get();

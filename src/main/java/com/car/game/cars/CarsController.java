@@ -1,6 +1,6 @@
 package com.car.game.cars;
 
-import com.car.game.cars.dto.CarDto;
+import com.car.game.cars.dto.CarInformation;
 import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.service.CarsService;
@@ -26,14 +26,14 @@ public class CarsController {
     @PostMapping(value = "/car")
     @ApiOperation("Add new car")
     @ResponseStatus(CREATED)
-    public boolean addCar(@RequestBody CarDto carDto){
-        return carsService.addCar(carDto);
+    public boolean addCar(@RequestBody CarInformation carInformation){
+        return carsService.addCar(carInformation);
     }
 
     @DeleteMapping(value = "/car")
     @ApiOperation("Remove car")
     @ResponseStatus(NO_CONTENT)
-    public void deleteCar(@RequestBody CarDto carsDto){
+    public void deleteCar(@RequestBody CarInformation carsDto){
         carsService.deleteCar(carsDto);
     }
 
