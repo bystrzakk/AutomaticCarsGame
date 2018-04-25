@@ -6,6 +6,7 @@ import com.car.game.cars.dto.CarSetup;
 import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
+import com.car.game.common.model.CarHistory;
 import com.car.game.common.model.CarPk;
 import com.car.game.common.repository.CarHistoryrepository;
 import com.car.game.common.repository.CarRepository;
@@ -112,19 +113,32 @@ public class CarsService {
         log.info("Car was added to game");
     }
 
+    private CarHistory prepareCarHistoryMove(Move move, CarMoveDto carMoveDto){
+        CarHistory carHistoryMove = new CarHistory();
+        Car car = new Car();
+        car.setCarPk(carMoveDto.getCar());
+        carHistoryMove.setMove(move);
+        carHistoryMove.setCar(car);
+
+        return carHistoryMove;
+    }
+
     public void moveCar(CarMoveDto carMoveDto) {
         ActualInformation actualInformation = ActualInformation.getActualInformation();
         MapInformation mapInformation = actualInformation.getMapInformationByCar(carMoveDto.getCar());
         Position position = actualInformation.getCarPositionByCar(carMoveDto.getCar());
 
         // Changing only direction, no movement
-        if(carMoveDto.getMove()!=FORWARD){
-            mapInformation.setDirection(updateDirection(FORWARD,mapInformation));
-            actualInformation.updateConcurentHashMap(position,mapInformation);;
+        if(carMoveDto.getMove() != FORWARD){
+            mapInformation.setDirection(updateDirection(FORWARD, mapInformation));
+            actualInformation.updateConcurentHashMap(position, mapInformation);
+            prepareCarHistoryMove(carMoveDto.getMove(), carMoveDto);
             return;
         }
 
-        Position futurePosition = checkFuturePosition(mapInformation,position);
+        prepareCarHistoryMove(FORWARD, carMoveDto);
+
+        Position futurePosition = checkFuturePosition(mapInformation, position);
         if(futurePosition == null){
             log.warning("Out of the map!");
             return;
@@ -134,15 +148,15 @@ public class CarsService {
         if(futureMapInformation.getIsWall()){
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
-            actualInformation.updateConcurentHashMap(position,mapInformation);
+            actualInformation.updateConcurentHashMap(position, mapInformation);
             return;
         }
         //CHANGE PLACE
         if(futureMapInformation.getCar()==null){
-            actualInformation.updateConcurentHashMap(futurePosition,mapInformation);
+            actualInformation.updateConcurentHashMap(futurePosition, mapInformation);
             mapInformation.setCar(null);
             mapInformation.setDirection(N);
-            actualInformation.updateConcurentHashMap(position,mapInformation);
+            actualInformation.updateConcurentHashMap(position, mapInformation);
             return;
         }
         // CRASH IN ANTOHER CAR
