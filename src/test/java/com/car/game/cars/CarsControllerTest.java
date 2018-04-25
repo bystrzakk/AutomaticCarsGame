@@ -1,7 +1,7 @@
 package com.car.game.cars;
 
 import com.car.game.cars.dto.CarDto;
-import com.car.game.cars.dto.CarMoveDto;
+import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
 import com.car.game.cars.service.CarsService;
 import com.car.game.common.enums.CarType;
@@ -12,7 +12,7 @@ import com.car.game.common.repository.CarRepository;
 import com.car.game.configuration.TestConfig;
 import com.car.game.game.ActualInformation;
 
-import com.car.game.game.Position;
+import com.car.game.game.FieldPosition;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,11 +91,11 @@ public class CarsControllerTest extends TestConfig {
     }
 
     private CarSetup getCarSetup(){
-        return new CarSetup(getCarDto(),"testMapName", new Position(0,0));
+        return new CarSetup(getCarDto(),"testMapName", new FieldPosition(0,0));
     }
 
-    private CarMoveDto getCarMove(){
-        return new CarMoveDto(getCarPk(),getMove());
+    private CarMove getCarMove(){
+        return new CarMove(getCarPk(),getMove());
     }
 
     private CarPk getCarPk(){
