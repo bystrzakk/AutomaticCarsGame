@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Data
 public class CarSetup {
-    private @NotNull CarDto car;
+    private @NotNull CarInformation car;
     private @NotNull String mapName;
     private @NotNull FieldPosition fieldPosition;
 }

@@ -1,7 +1,7 @@
 package com.car.game.game;
 
+import com.car.game.common.enums.CarType;
 import com.car.game.common.enums.Direction;
-import com.car.game.common.model.CarPk;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,8 @@ import static com.car.game.common.enums.Direction.N;
 public class FieldlInformation {
 
     private Boolean isWall;
-    private CarPk car ;
+    private String carName;
+    private CarType type;
     private Direction direction = N;
     private Boolean isCrashed;
 

@@ -1,21 +1,23 @@
 package com.car.game.common.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.car.game.common.enums.CarType;
+import lombok.*;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Car {
-    @EmbeddedId
-    private CarPk carPk;
-    private String mapName;
-    private boolean isCrashed;
+    @Id
+    private String name;
+    private CarType type;
+    private boolean isCrashed = false;
+    private String mapName = "";
+
+    public Car(String name){
+        this.name = name;
+    }
 }
