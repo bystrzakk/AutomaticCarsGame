@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface CarHistoryrepository extends JpaRepository <CarHistory, Long> {
 
-    @Query("Select ch.move from CarHistory ch where ch.car.carPk.name = :carName ORDER BY ch.id ASC")
+    @Query("Select ch.move from CarHistory ch where ch.car.name = :carName ORDER BY ch.id ASC")
     List<Move> findAllCarMovements(@Param("carName")String carName);
 }
