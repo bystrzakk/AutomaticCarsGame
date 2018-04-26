@@ -24,20 +24,20 @@ import static org.mockito.Mockito.when;
 
 public class CarsServiceTest {
 
-    private CarRepository repository;
+    private CarRepository carRepository;
     private CarsService carsService;
     private CarHistoryrepository carHistoryrepository;
     private CarsAssembler carsAssembler;
 
     @Before
     public void setUp() throws Exception {
-        repository = mock(CarRepository.class);
-        carsService = new CarsService(repository, carHistoryrepository, carsAssembler);
+        carRepository = mock(CarRepository.class);
+        carsService = new CarsService(carRepository, carsAssembler, carHistoryrepository);
     }
 
     @Test
     public void shouldReturnAllCars() throws Exception{
-        when(repository.findAll()).thenReturn(getCars());
+        when(carRepository.findAll()).thenReturn(getCars());
         final List<Car> carList = carsService.getCars();
 
         //assertThat(carList.get(0).getCarPk().getName()).isEqualTo(getCars().get(0).getCarPk().getName());
@@ -68,7 +68,7 @@ public class CarsServiceTest {
 
     @Test
     public void shouldReturnTrueWhenRemovingExistingCar() throws Exception{
-        when(repository.existsById(any())).thenReturn(true);
+        when(carRepository.existsById(any())).thenReturn(true);
         final boolean deleteCar = carsService.deleteCar(getCarDto());
 
         assertThat(deleteCar).isTrue();
@@ -76,7 +76,7 @@ public class CarsServiceTest {
 
     @Test
     public void shouldReturnFalseWhenRemovingNotExistingCar() throws Exception{
-        when(repository.existsById(any())).thenReturn(false);
+        when(carRepository.existsById(any())).thenReturn(false);
         final boolean deleteCar = carsService.deleteCar(getCarDto());
 
         assertThat(deleteCar).isFalse();
