@@ -1,6 +1,7 @@
 package com.car.game.map;
 
 import com.car.game.common.model.MapGame;
+import com.car.game.map.dto.MapRequestDto;
 import com.car.game.map.service.MapService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -30,18 +31,18 @@ public class MapController {
     @PostMapping(value = "/map")
     @ApiOperation("Add map")
     @ResponseStatus(CREATED)
-    public Boolean addNewMap(@RequestParam(value = "name") String name, @RequestParam(value = "body") String body) {
-        return mapService.addNewMap(name,body);
+    public Boolean addNewMap(@RequestBody MapRequestDto mapRequestDto) {
+        return mapService.addNewMap(mapRequestDto);
     }
 
-    @PostMapping(value = "/select")
+    @PostMapping(value = "/selected-map")
     @ApiOperation("Select the map")
     @ResponseStatus(OK)
     public Boolean selectMap(@RequestParam(value = "name") String name) {
         return mapService.selectMap(name);
     }
 
-    @PostMapping(value = "/unselect")
+    @PostMapping(value = "/unselected-map")
     @ApiOperation("Unselect the game")
     @ResponseStatus(OK)
     public void unselectMap(@RequestParam(value = "name") String name){

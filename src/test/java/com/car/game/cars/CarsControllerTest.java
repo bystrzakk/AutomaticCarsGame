@@ -46,7 +46,7 @@ public class CarsControllerTest extends TestConfig {
 
     @Test
     public void testAddCar() throws Exception{
-        this.mockMvc.perform(post("/car")
+        mockMvc.perform(post("/car")
                 .contentType(contentType)
                 .content(json(getCarDto())))
                 .andExpect(status().isCreated());

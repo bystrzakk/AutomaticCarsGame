@@ -33,8 +33,8 @@ public class CarsController {
     @DeleteMapping(value = "/car")
     @ApiOperation("Remove car")
     @ResponseStatus(NO_CONTENT)
-    public void deleteCar(@RequestBody CarInformation carsDto){
-        carsService.deleteCar(carsDto);
+    public void deleteCar(@RequestBody CarInformation carInformation){
+        carsService.deleteCar(carInformation);
     }
 
     @GetMapping(value = "/cars")
@@ -44,35 +44,35 @@ public class CarsController {
         return carsService.getCars() ;
     }
 
-    @PostMapping(value = "/car/first/setup")
+    @PostMapping(value = "/car-first-setup")
     @ApiOperation("Add car to game controller")
     @ResponseStatus(OK)
     public boolean putCarInMap(@RequestBody CarSetup carSetup){
         return carsService.addCarToMap(carSetup);
     }
 
-    @PostMapping(value = "/car/move")
+    @PostMapping(value = "/car-move")
     @ApiOperation("Move car on game map controller")
     @ResponseStatus(OK)
     public void moveCarOnMap(@RequestBody CarMove carMove){
         carsService.moveCar(carMove);
     }
 
-    @GetMapping(value = "/car/history")
+    @GetMapping(value = "/car-history")
     @ApiOperation("Get movements history for given car")
     @ResponseStatus(OK)
     public List<Move> getCarHistory(@RequestParam(value = "carName") String carName){
         return carsService.getCarHistory(carName);
     }
 
-    @DeleteMapping(value = "/car/delete-from-game")
+    @DeleteMapping(value = "/car-remove-from-game")
     @ApiOperation("Delete car from the game controller")
     @ResponseStatus(OK)
     public boolean deleteCarFromMap(@RequestParam(value = "carName") String carName){
         return carsService.deleteCarFromMap(carName);
     }
 
-    @PostMapping(value = "/car/repair")
+    @PostMapping(value = "/car-repair")
     @ApiOperation("Repair car controller")
     @ResponseStatus(OK)
     public boolean repairCar(@RequestParam(value = "carName") String carName){

@@ -3,10 +3,10 @@ package com.car.game.map.service;
 import com.car.game.common.model.MapGame;
 import com.car.game.common.repository.MapRepository;
 import com.car.game.game.ActualInformation;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.car.game.map.dto.MapRequestDto;
+
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -29,13 +29,13 @@ public class MapService {
         return mapRepository.findAll();
     }
 
-    public boolean addNewMap(String mapName, String body) {
-        if (!isMapExist(mapName) && correctMapBodyFormat(body)) {
-            mapRepository.save(mapAssembler.getMapGame(mapName,body));
-            log.info("New map `" + mapName + "` was stored in Database");
+    public boolean addNewMap(MapRequestDto mapRequestDto) {
+        if (!isMapExist(mapRequestDto.getName()) && correctMapBodyFormat(mapRequestDto.getBody())) {
+            mapRepository.save(mapAssembler.getMapGame(mapRequestDto.getName(), mapRequestDto.getBody()));
+            log.info("New map `" + mapRequestDto.getName() + "` was stored in database");
             return true;
         }
-        log.warning("The map `" + mapName + "` is curently added");
+        log.warning("Map `" + mapRequestDto.getName() + "` is currently added");
         return false;
     }
 
@@ -45,12 +45,12 @@ public class MapService {
 
     public boolean selectMap(String mapName) {
         if (actualInformation.getMapByName(mapName) != null) {
-            log.warning("You can't launch a new game, the selected map: " + mapName+ " is currently in use.");
+            log.warning("You can't launch a new game, selected map: " + mapName+ " is currently in use.");
             return false;
         }
         MapGame mapGame = mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(mapName);
         if (mapGame == null) {
-            log.info("The map " + mapName + " does not exist.");
+            log.info("Map " + mapName + " does not exist.");
             return false;
         }
 
@@ -68,13 +68,13 @@ public class MapService {
         MapGame mapGame = mapRepository.findByName(mapName);
 
         if (mapGame == null) {
-            log.warning("The map was not found.");
+            log.warning("Map was not found.");
             return false;
         }
 
 
         if (actualInformation.getMapByName(mapName)==null) {
-            log.warning("You can't delete the map: " + mapName + ". Is currently in use.");
+            log.warning("You can't delete the map: " + mapName + ". Currently in use.");
             return false;
         }
 
