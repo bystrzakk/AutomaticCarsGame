@@ -4,10 +4,10 @@ package com.car.game.map.service;
 import com.car.game.common.model.MapGame;
 import com.car.game.common.repository.MapRepository;
 import com.car.game.configuration.MockMethod;
-import com.car.game.game.ActualInformation;
+
 
 import com.car.game.map.dto.MapRequestDto;
-import org.junit.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
