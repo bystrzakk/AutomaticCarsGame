@@ -8,8 +8,6 @@ import com.car.game.common.model.Car;
 import com.car.game.common.model.CarHistory;
 import com.car.game.common.repository.CarHistoryrepository;
 import com.car.game.common.repository.CarRepository;
-import com.car.game.game.FieldPosition;
-import com.car.game.game.FieldlInformation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,30 +20,30 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class CarsServiceTest {
+public class CarServiceTest {
 
     private CarRepository carRepository;
-    private CarsService carsService;
+    private CarService carService;
     private CarHistoryrepository carHistoryrepository;
-    private CarsAssembler carsAssembler;
+    private CarAssembler carsAssembler;
 
     @Before
     public void setUp() throws Exception {
         carRepository = mock(CarRepository.class);
-        carsService = new CarsService(carRepository, carsAssembler, carHistoryrepository);
+        carService = new CarService(carRepository, carsAssembler, carHistoryrepository);
     }
 
     @Test
     public void shouldReturnAllCars() throws Exception{
         when(carRepository.findAll()).thenReturn(getCars());
-        final List<Car> carList = carsService.getCars();
+        final List<Car> carList = carService.getCars();
 
         //assertThat(carList.get(0).getCarPk().getName()).isEqualTo(getCars().get(0).getCarPk().getName());
     }
 
     @Test
     public void shouldReturnTrueWhenAddingNewCar() throws Exception{
-        final boolean isCarAdded = carsService.addCar(getCarDto());
+        final boolean isCarAdded = carService.addCar(getCarDto());
 
         assertThat(isCarAdded).isTrue();
     }
@@ -53,7 +51,7 @@ public class CarsServiceTest {
     @Test
     public void shouldReturnFalseWhenAddingExistingCar() throws Exception{
         //when(repository.findCarByCarPk(any())).thenReturn(getCar());
-        final boolean isCarAdded = carsService.addCar(getCarDto());
+        final boolean isCarAdded = carService.addCar(getCarDto());
 
         assertThat(isCarAdded).isFalse();
     }
@@ -61,7 +59,7 @@ public class CarsServiceTest {
     @Test
     public void shouldReturnNullForNoCriteria() throws Exception{
 
-        //final FieldPosition futureFieldPosition = carsService.checkFuturePosition(new FieldlInformation(), new FieldPosition(0, 0));
+        //final FieldPosition futureFieldPosition = carService.checkFuturePosition(new FieldlInformation(), new FieldPosition(0, 0));
 
         //assertThat(futureFieldPosition).isEqualTo(null);
     }
@@ -69,7 +67,7 @@ public class CarsServiceTest {
     @Test
     public void shouldReturnTrueWhenRemovingExistingCar() throws Exception{
         when(carRepository.existsById(any())).thenReturn(true);
-        final boolean deleteCar = carsService.deleteCar(getCarDto());
+        final boolean deleteCar = carService.deleteCar(getCarDto());
 
         assertThat(deleteCar).isTrue();
     }
@@ -77,7 +75,7 @@ public class CarsServiceTest {
     @Test
     public void shouldReturnFalseWhenRemovingNotExistingCar() throws Exception{
         when(carRepository.existsById(any())).thenReturn(false);
-        final boolean deleteCar = carsService.deleteCar(getCarDto());
+        final boolean deleteCar = carService.deleteCar(getCarDto());
 
         assertThat(deleteCar).isFalse();
     }

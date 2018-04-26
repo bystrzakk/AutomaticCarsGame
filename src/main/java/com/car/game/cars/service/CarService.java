@@ -27,15 +27,15 @@ import static com.car.game.common.enums.Move.TURN_LEFT;
 
 @Log
 @Service
-public class CarsService {
+public class CarService {
 
     private CarRepository carRepository;
     private CarHistoryrepository carHistoryrepository;
-    private CarsAssembler carsAssembler;
+    private CarAssembler carsAssembler;
     private ActualInformation actualInformation = ActualInformation.getActualInformation();
 
     @Autowired
-    public CarsService(CarRepository carRepository, CarsAssembler carsAssembler, CarHistoryrepository carHistoryrepository) {
+    public CarService(CarRepository carRepository, CarAssembler carsAssembler, CarHistoryrepository carHistoryrepository) {
         this.carRepository = carRepository;
         this.carsAssembler = carsAssembler;
         this.carHistoryrepository = carHistoryrepository;

@@ -44,7 +44,7 @@ public class MapServiceTest extends MockMethod{
     @Test
     public void shouldReturnTrueWhenAddNewMap() throws Exception{
         when(mapAssembler.getMapGame(anyString(),anyString())).thenReturn(getMapGame(true, false));
-        final boolean isMapAdded = mapService.addNewMap(getMapRequestDto("testMapName","0,0,1"));
+        final boolean isMapAdded = mapService.addNewMap(getMapRequestDto("testMapName3","0,0,0"));
 
         assertThat(isMapAdded).isTrue();
     }
