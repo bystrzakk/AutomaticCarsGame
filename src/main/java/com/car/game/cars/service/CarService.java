@@ -7,7 +7,7 @@ import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarHistory;
-import com.car.game.common.repository.CarHistoryrepository;
+import com.car.game.common.repository.CarHistoryRepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.game.ActualInformation;
 import com.car.game.game.FieldPosition;
@@ -30,15 +30,13 @@ import static com.car.game.common.enums.Move.TURN_LEFT;
 public class CarService {
 
     private CarRepository carRepository;
-    private CarHistoryrepository carHistoryrepository;
-    private CarAssembler carsAssembler;
+    private CarHistoryRepository carHistoryRepository;
     private ActualInformation actualInformation = ActualInformation.getActualInformation();
 
     @Autowired
-    public CarService(CarRepository carRepository, CarAssembler carsAssembler, CarHistoryrepository carHistoryrepository) {
+    public CarService(CarRepository carRepository, CarHistoryRepository carHistoryRepository) {
         this.carRepository = carRepository;
-        this.carsAssembler = carsAssembler;
-        this.carHistoryrepository = carHistoryrepository;
+        this.carHistoryRepository = carHistoryRepository;
     }
 
     @Transactional
@@ -66,7 +64,7 @@ public class CarService {
     }
 
     public List<Move> getCarHistory(String name){
-        return carHistoryrepository.findAllCarMovements(name);
+        return carHistoryRepository.findAllCarMovements(name);
     }
     public boolean deleteCar(CarInformation carInformation) {
         Car car = carRepository.findCarByName(carInformation.getName());
@@ -148,7 +146,7 @@ public class CarService {
 
     private void saveCarHistoryMove(Move move, CarMove carMove){
         CarHistory carHistory = prepareCarHistoryMove(move, carMove);
-        carHistoryrepository.save(carHistory);
+        carHistoryRepository.save(carHistory);
     }
 
     public void moveCar(CarMove carMove) {
