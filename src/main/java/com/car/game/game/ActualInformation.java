@@ -6,7 +6,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Log
@@ -86,5 +89,4 @@ public class ActualInformation {
     public void unloadMap(String name){
         actualMapsInGame.remove(name);
     }
-
 }

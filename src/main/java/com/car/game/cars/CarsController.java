@@ -64,4 +64,18 @@ public class CarsController {
     public List<Move> getCarHistory(@RequestParam(value = "carName") String carName){
         return carsService.getCarHistory(carName);
     }
+
+    @DeleteMapping(value = "/car/delete-from-game")
+    @ApiOperation("Delete car from the game controller")
+    @ResponseStatus(OK)
+    public boolean deleteCarFromMap(@RequestParam(value = "carName") String carName){
+        return carsService.deleteCarFromMap(carName);
+    }
+
+    @PostMapping(value = "/car/repair")
+    @ApiOperation("Repair car controller")
+    @ResponseStatus(OK)
+    public boolean repairCar(@RequestParam(value = "carName") String carName){
+        return carsService.repairCar(carName);
+    }
 }

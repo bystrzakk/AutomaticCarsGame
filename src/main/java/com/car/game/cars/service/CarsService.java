@@ -71,7 +71,7 @@ public class CarsService {
     public boolean deleteCar(CarInformation carInformation) {
         Car car = carRepository.findCarByName(carInformation.getName());
         if(car!=null){
-            carRepository.delete(new Car(carInformation.getName()));
+            carRepository.delete(car);
             log.info("Car " + carInformation.getName() + " has been removed from database");
             return true;
         }
@@ -293,5 +293,51 @@ public class CarsService {
         }
         return fieldPositionAfterMove;
 
+    }
+
+    public boolean deleteCarFromMap(String carName) {
+        Car car = carRepository.findCarByName(carName);
+        if (car == null) {
+            log.warning("Car " + carName + " is not exist in database.");
+            return false;
+        }
+
+        if (null == car.getMapName()) {
+            log.warning("Car " + carName+ " is not exist in any game.");
+            return false;
+        }
+
+        CarMove carMove = new CarMove();
+        carMove.setName(carName);
+        carMove.setMapName(car.getMapName());
+
+        ActualInformation actualInformation = ActualInformation.getActualInformation();
+        FieldPosition fieldPosition = actualInformation.getCarPositionByCar(carMove);
+        clearField(fieldPosition, actualInformation.getMapByName(car.getMapName()));
+
+        car.setMapName(null);
+        carRepository.save(car);
+
+        log.info("Car was deleted from game");
+        return true;
+    }
+
+    public boolean repairCar(String carName) {
+        Car car = carRepository.findCarByName(carName);
+        if (car == null) {
+            log.warning("Car " + carName + " is not exist in database.");
+            return false;
+        }
+
+        if (!car.isCrashed()) {
+            log.warning("Car " + carName+ " is not crashed.");
+            return false;
+        }
+
+        car.setCrashed(false);
+        carRepository.save(car);
+
+        log.info("Car is repaired.");
+        return true;
     }
 }
