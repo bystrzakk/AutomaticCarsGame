@@ -6,10 +6,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log
@@ -32,14 +29,16 @@ public class ActualInformation {
         if(map==null){
             return null;
         }
-        FieldlInformation fieldlInformation = map.getMap()
+        Optional<FieldlInformation> fieldlInformation = map.getMap()
                 .entrySet()
                 .stream()
-                .filter(a->a.getValue().getCarName()==car.getName())
+                .filter(a->car.getName().equals(a.getValue().getCarName()))
                 .map(a->a.getValue())
-                .findFirst()
-                .get();
-        return fieldlInformation;
+                .findAny();
+        if(!fieldlInformation.isPresent()){
+            return null;
+        }
+        return fieldlInformation.get();
     }
 
     public FieldPosition getCarPositionByCar(CarMove car) {
@@ -47,14 +46,16 @@ public class ActualInformation {
         if(map==null){
             return null;
         };
-        FieldPosition fieldPosition = map.getMap()
+        Optional<FieldPosition> fieldPosition = map.getMap()
                 .entrySet()
                 .stream()
-                .filter(a->a.getValue().getCarName()==car.getName())
+                .filter(a->car.getName().equals(a.getValue().getCarName()))
                 .map(a->a.getKey())
-                .findFirst()
-                .get();
-        return fieldPosition;
+                .findAny();
+        if(!fieldPosition.isPresent()){
+            return null;
+        }
+        return fieldPosition.get();
     }
 
     public FieldlInformation getMapInformation(FieldPosition fieldPosition,String mapName) {
@@ -73,11 +74,11 @@ public class ActualInformation {
                 stream().
                 map(Integer::parseInt).
                 collect(Collectors.toList());
-       int mapSize = (int)Math.sqrt(mapInListOfInt.size());
-       for(int y = 0 ; y<mapSize;y++){
-           int mapSizeX = mapSize;
-           for(int x = 0 ; x<mapSizeX;x++){
-               boolean isWall = mapInListOfInt.get((y*mapSize)+x)==1?true:false;
+        map.setSize((int)Math.sqrt(mapInListOfInt.size()));
+       for(int y = 0 ; y<map.getSize();y++){
+
+           for(int x = 0 ; x<map.getSize();x++){
+               boolean isWall = mapInListOfInt.get((y*map.getSize())+x)==1?true:false;
                map.getMap()
                        .put(new FieldPosition(x,y),
                                new FieldlInformation(isWall));
@@ -88,5 +89,6 @@ public class ActualInformation {
 
     public void unloadMap(String name){
         actualMapsInGame.remove(name);
+        log.info("Unselect map"+ name);
     }
 }

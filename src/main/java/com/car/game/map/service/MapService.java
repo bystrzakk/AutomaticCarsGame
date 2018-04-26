@@ -57,6 +57,7 @@ public class MapService {
         mapGame.setUsed(true);
         mapRepository.save(mapGame);
         actualInformation.loadMapToGame(mapGame);
+        log.info("Select map :"+ mapName);
         return true;
     }
 
@@ -73,7 +74,7 @@ public class MapService {
         }
 
 
-        if (actualInformation.getMapByName(mapName)==null) {
+        if (actualInformation.getMapByName(mapName)!=null) {
             log.warning("You can't delete the map: " + mapName + ". Currently in use.");
             return false;
         }
