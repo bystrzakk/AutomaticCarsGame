@@ -19,11 +19,9 @@ public class CarHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "name")
     private Car car;
-
     @Enumerated(EnumType.STRING)
     private Move move;
 
