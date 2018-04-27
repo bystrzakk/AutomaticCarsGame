@@ -1,6 +1,7 @@
 package com.car.game.configuration;
 
 import com.car.game.Application;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class})
 @WebAppConfiguration
+@Ignore
 public class TestConfig extends MockMethod{
 
     protected HttpMessageConverter mappingJackson2HttpMessageConverter;

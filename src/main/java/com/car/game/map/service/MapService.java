@@ -1,5 +1,8 @@
 package com.car.game.map.service;
 
+import com.car.exception.SelectMapException;
+import com.car.exception.UnselectMapException;
+
 import com.car.game.common.model.MapGame;
 import com.car.game.common.repository.MapRepository;
 import com.car.game.game.ActualInformation;
@@ -30,13 +33,15 @@ public class MapService {
     }
 
     public boolean addNewMap(MapRequestDto mapRequestDto) {
+
         if (!isMapExist(mapRequestDto.getName()) && correctMapBodyFormat(mapRequestDto.getBody())) {
             mapRepository.save(mapAssembler.getMapGame(mapRequestDto.getName(), mapRequestDto.getBody()));
             log.info("New map `" + mapRequestDto.getName() + "` was stored in database");
             return true;
+        }else {
+            log.warning("Map `" + mapRequestDto.getName() + "` is currently added");
+            return false;
         }
-        log.warning("Map `" + mapRequestDto.getName() + "` is currently added");
-        return false;
     }
 
     protected boolean isMapExist(String mapName) {
@@ -44,7 +49,7 @@ public class MapService {
     }
 
     public boolean selectMap(String mapName) {
-        if (actualInformation.getMapByName(mapName) != null) {
+        if(actualInformation.getMapByName(mapName) != null) {
             log.warning("You can't launch a new game, selected map: " + mapName+ " is currently in use.");
             return false;
         }
@@ -53,7 +58,6 @@ public class MapService {
             log.info("Map " + mapName + " does not exist.");
             return false;
         }
-
         mapGame.setUsed(true);
         mapRepository.save(mapGame);
         actualInformation.loadMapToGame(mapGame);
@@ -62,7 +66,11 @@ public class MapService {
     }
 
     public void unselectMap(String name) {
-        actualInformation.unloadMap(name);
+        try {
+            actualInformation.unloadMap(name);
+        }catch (Exception e){
+            throw new UnselectMapException(e.getMessage());
+        }
     }
 
     public boolean deleteMap(String mapName) {
@@ -72,6 +80,7 @@ public class MapService {
             log.warning("Map was not found.");
             return false;
         }
+
 
 
         if (actualInformation.getMapByName(mapName)!=null) {

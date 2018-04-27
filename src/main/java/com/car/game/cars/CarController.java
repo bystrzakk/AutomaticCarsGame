@@ -1,5 +1,6 @@
 package com.car.game.cars;
 
+import com.car.exception.RemoveCarException;
 import com.car.game.cars.dto.CarInformation;
 import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
@@ -10,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,9 +35,12 @@ public class CarController {
 
     @DeleteMapping(value = "/car")
     @ApiOperation("Remove car")
-    @ResponseStatus(NO_CONTENT)
-    public void deleteCar(@RequestBody CarInformation carInformation){
-        carService.deleteCar(carInformation);
+    public ResponseEntity<String> deleteCar(@RequestBody CarInformation carInformation){
+        final boolean isCarDeleted = carService.deleteCar(carInformation);
+        if (isCarDeleted==false){
+            throw new RemoveCarException("Remove car exception");
+        }
+        return new ResponseEntity<>("Car is removed", HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/cars")
@@ -67,15 +73,15 @@ public class CarController {
 
     @DeleteMapping(value = "/car-remove-from-game")
     @ApiOperation("Delete car from the game controller")
-    @ResponseStatus(NO_CONTENT)
-    public boolean deleteCarFromMap(@RequestParam(value = "carName") String carName){
-        return carService.deleteCarFromMap(carName);
+    public ResponseEntity<String> deleteCarFromMap(@RequestParam(value = "carName") String carName){
+        carService.deleteCarFromMap(carName);
+        return new ResponseEntity<>("Car is removed",HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(value = "/car-repair")
     @ApiOperation("Repair car controller")
-    @ResponseStatus(OK)
-    public boolean repairCar(@RequestParam(value = "carName") String carName){
-        return carService.repairCar(carName);
+    public ResponseEntity<String> repairCar(@RequestParam(value = "carName") String carName){
+        carService.repairCar(carName);
+        return new ResponseEntity<>("Car repaired", HttpStatus.OK);
     }
 }

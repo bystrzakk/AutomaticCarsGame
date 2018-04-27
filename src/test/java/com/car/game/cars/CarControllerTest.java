@@ -7,6 +7,8 @@ import com.car.game.cars.service.CarService;
 import com.car.game.common.enums.CarType;
 
 import com.car.game.common.enums.Move;
+import com.car.game.common.model.Car;
+import com.car.game.common.model.CarHistory;
 import com.car.game.common.repository.CarHistoryRepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.configuration.TestConfig;
@@ -17,7 +19,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
+
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -69,7 +75,17 @@ public class CarControllerTest extends TestConfig {
     }
 
     @Test
+    public void testRemoveCarWithException() throws Exception {
+        mockMvc.perform(delete("/car")
+                .contentType(contentType)
+                .content(json(getCarDto())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void testRemoveCar() throws Exception {
+        carsService.addCar(getCarDto());
         mockMvc.perform(delete("/car")
                 .contentType(contentType)
                 .content(json(getCarDto())))
@@ -126,5 +142,7 @@ public class CarControllerTest extends TestConfig {
         return Move.TURN_LEFT;
     }
 
-
+    private Car getCar(boolean isCrashed){
+        return new Car("testCarName",CarType.NORMAL,"testMapName",isCrashed, Arrays.asList(new CarHistory()));
+    }
 }
