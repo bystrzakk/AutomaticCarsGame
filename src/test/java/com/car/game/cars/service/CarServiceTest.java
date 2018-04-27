@@ -6,7 +6,7 @@ import com.car.game.common.enums.CarType;
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarHistory;
-import com.car.game.common.repository.CarHistoryrepository;
+import com.car.game.common.repository.CarHistoryRepository;
 import com.car.game.common.repository.CarRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,13 +28,13 @@ public class CarServiceTest {
 
     private CarRepository carRepository;
     private CarService carService;
-    private CarHistoryrepository carHistoryrepository;
+    private CarHistoryRepository carHistoryRepository;
     private CarAssembler carsAssembler;
 
     @Before
     public void setUp() throws Exception {
         carRepository = mock(CarRepository.class);
-        carService = new CarService(carRepository, carsAssembler, carHistoryrepository);
+        carService = new CarService(carRepository, carsAssembler, carHistoryRepository);
     }
 
     @Test

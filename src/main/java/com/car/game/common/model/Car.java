@@ -6,10 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,6 +21,12 @@ public class Car {
     private String name;
     @Enumerated(EnumType.STRING)
     private CarType type;
-    private String mapName;
+    private String mapName = "";
     private boolean isCrashed;
+
+    @OneToMany(mappedBy = "car",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<CarHistory> carHistory = new ArrayList<>();
 }

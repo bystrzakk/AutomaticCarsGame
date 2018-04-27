@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CarHistoryrepository extends JpaRepository <CarHistory, Long> {
+public interface CarHistoryRepository extends JpaRepository <CarHistory, Long> {
 
     @Query("Select ch.move from CarHistory ch where ch.car.name = :carName ORDER BY ch.id ASC")
     List<Move> findAllCarMovements(@Param("carName")String carName);

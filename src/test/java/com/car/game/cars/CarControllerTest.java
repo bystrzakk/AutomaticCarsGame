@@ -7,7 +7,7 @@ import com.car.game.cars.service.CarService;
 import com.car.game.common.enums.CarType;
 
 import com.car.game.common.enums.Move;
-import com.car.game.common.repository.CarHistoryrepository;
+import com.car.game.common.repository.CarHistoryRepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.configuration.TestConfig;
 
@@ -34,12 +34,12 @@ public class CarControllerTest extends TestConfig {
     private CarRepository carRepository;
 
     @Autowired
-    private CarHistoryrepository carHistoryrepository;
+    private CarHistoryRepository carHistoryRepository;
 
     @Before
     public void setup() throws Exception {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
-        this.carHistoryrepository.deleteAllInBatch();
+        this.carHistoryRepository.deleteAllInBatch();
         this.carRepository.deleteAllInBatch();
     }
 

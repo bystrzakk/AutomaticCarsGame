@@ -7,7 +7,7 @@ import com.car.game.common.enums.Direction;
 import com.car.game.common.enums.Move;
 import com.car.game.common.model.Car;
 import com.car.game.common.model.CarHistory;
-import com.car.game.common.repository.CarHistoryrepository;
+import com.car.game.common.repository.CarHistoryRepository;
 import com.car.game.common.repository.CarRepository;
 import com.car.game.game.ActualInformation;
 import com.car.game.game.FieldPosition;
@@ -30,15 +30,13 @@ import static com.car.game.common.enums.Move.TURN_LEFT;
 public class CarService {
 
     private CarRepository carRepository;
-    private CarHistoryrepository carHistoryrepository;
-    private CarAssembler carsAssembler;
+    private CarHistoryRepository carHistoryRepository;
     private ActualInformation actualInformation = ActualInformation.getActualInformation();
 
     @Autowired
-    public CarService(CarRepository carRepository, CarAssembler carsAssembler, CarHistoryrepository carHistoryrepository) {
+    public CarService(CarRepository carRepository, CarHistoryRepository carHistoryRepository) {
         this.carRepository = carRepository;
-        this.carsAssembler = carsAssembler;
-        this.carHistoryrepository = carHistoryrepository;
+        this.carHistoryRepository = carHistoryRepository;
     }
 
     @Transactional
@@ -66,7 +64,7 @@ public class CarService {
     }
 
     public List<Move> getCarHistory(String name){
-        return carHistoryrepository.findAllCarMovements(name);
+        return carHistoryRepository.findAllCarMovements(name);
     }
     public boolean deleteCar(CarInformation carInformation) {
         Car car = carRepository.findCarByName(carInformation.getName());
@@ -86,19 +84,19 @@ public class CarService {
             log.info("Car is not in DB");
             return false;
         }
-        if(!car.getMapName().equals("")){
+        if(car.getMapName()!=null){
             log.info("Car is using in map :"+ car.getMapName());
             return false;
         }
         if(!isPositionOnMap(carSetup))
         {
-            log.info("Bad fieldPosition");
+            log.info("Bad field Position");
             return false;
         }
         FieldlInformation fieldlInformation = actualInformation.getMapInformation(carSetup.getFieldPosition(),carSetup.getMapName());
         Boolean isWall = fieldlInformation.getIsWall();
         Boolean isCar = fieldlInformation.getCarName()!=null?true:false;
-        if(isWall||isCar||exist(carSetup.getCar())){
+        if(isWall||isCar){
             log.info("Cant place car on given field");
             return false;
         }
@@ -106,8 +104,11 @@ public class CarService {
             log.info("Out of map");
             return false;
         }
-            log.info("Car was added to game");
-            updateCarInDB(carSetup);
+        carRepository.update(car.getName(),carSetup.getMapName(),car.getType());
+        fieldlInformation.setCarName(carSetup.getCar().getName());
+        MapInGame map = actualInformation.getMapByName(carSetup.getMapName());
+        map.getMap().replace(carSetup.getFieldPosition(), fieldlInformation);
+        log.info("Car was added to game");
             return true;
     }
 
@@ -125,16 +126,6 @@ public class CarService {
         return true;
     }
 
-    private void updateCarInDB(CarSetup carSetup){
-        Car car =  Car.builder()
-                .name(carSetup.getCar().getName())
-                .mapName(carSetup.getMapName())
-                .type(carSetup.getCar().getType())
-                .build();
-        carRepository.save(car);
-        log.info("Car was added to game");
-    }
-
     private CarHistory prepareCarHistoryMove(Move move, CarMove carMove){
         CarHistory carHistoryMove = new CarHistory();
         Car car = new Car();
@@ -148,40 +139,45 @@ public class CarService {
 
     private void saveCarHistoryMove(Move move, CarMove carMove){
         CarHistory carHistory = prepareCarHistoryMove(move, carMove);
-        carHistoryrepository.save(carHistory);
+        carHistoryRepository.save(carHistory);
     }
 
     public void moveCar(CarMove carMove) {
         FieldlInformation fieldlInformation = actualInformation.getFieldInformationByCar(carMove);
         FieldPosition fieldPosition = actualInformation.getCarPositionByCar(carMove);
-        MapInGame map = actualInformation.getMapByName(carMove.getMapName());
         if(fieldlInformation==null||fieldPosition==null){
+            log.info("Car not found");
             return;
         }
+        MapInGame map = actualInformation.getMapByName(carMove.getMapName());
         // Changing only direction, no movement
         if(carMove.getMove()!=FORWARD){
             fieldlInformation.setDirection(updateDirection(FORWARD, fieldlInformation));
             map.getMap().replace(fieldPosition, fieldlInformation);
             saveCarHistoryMove(carMove.getMove(), carMove);
+            log.info("Car turn "+ carMove.getMove());
             return;
         }
         saveCarHistoryMove(FORWARD, carMove);
 
         FieldPosition futureFieldPosition = checkFuturePosition(fieldlInformation, fieldPosition,map.getSize());
-        if(futureFieldPosition == null){
+        FieldlInformation futureFieldlInformation = actualInformation.getMapInformation(futureFieldPosition, carMove.getMapName());
+
+        if(futureFieldPosition == null||futureFieldlInformation==null){
             log.warning("Out of the map!");
             return;
         }
-        FieldlInformation futureFieldlInformation = actualInformation.getMapInformation(futureFieldPosition, carMove.getMapName());
         //IF WALL I DEAD
         if(futureFieldlInformation.getIsWall()){
             clearField(fieldPosition,map);
+            log.info("Car DEAD");
             return;
         }
         //CHANGE PLACE
         if(futureFieldlInformation==null){
             map.getMap().replace(futureFieldPosition, fieldlInformation);
             clearField(fieldPosition,map);
+            log.info("Car CHANGE PLACE");
             return;
         }
         // CRASH IN ANTOHER CAR
@@ -204,12 +200,14 @@ public class CarService {
             // DEAD ENEMY
             map.getMap().replace(futureFieldPosition, fieldlInformation);
             clearField(fieldPosition,map);
+            log.info("Dead enemy");
             return;
         }
 
         if(TRUCK == futureFieldlInformation.getType() && NORMAL == fieldlInformation.getType()){
             // I DEAD
             clearField(fieldPosition,map);
+            log.info("Car DEAD");
             return;
         }
 
@@ -217,12 +215,14 @@ public class CarService {
             // DEAD BOTH
             clearField(fieldPosition,map);
             clearField(futureFieldPosition,map);
+            log.info("Dead BOTH");
             return;
         }
 
         if(RACING != futureFieldlInformation.getType() && RACING == fieldlInformation.getType()){
             // I DEAD
             clearField(fieldPosition,map);
+            log.info("Car Dead");
             return;
         }
     }
