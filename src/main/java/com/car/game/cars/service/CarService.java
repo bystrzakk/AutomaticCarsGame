@@ -15,6 +15,7 @@ import com.car.game.game.FieldlInformation;
 import com.car.game.game.MapInGame;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +33,13 @@ public class CarService {
     private CarRepository carRepository;
     private CarHistoryRepository carHistoryRepository;
     private ActualInformation actualInformation = ActualInformation.getActualInformation();
+    private SimpMessageSendingOperations messageTemplate;
 
     @Autowired
-    public CarService(CarRepository carRepository, CarHistoryRepository carHistoryRepository) {
+    public CarService(CarRepository carRepository, CarHistoryRepository carHistoryRepository, SimpMessageSendingOperations messageTemplate) {
         this.carRepository = carRepository;
         this.carHistoryRepository = carHistoryRepository;
+        this.messageTemplate = messageTemplate;
     }
 
     @Transactional
@@ -167,26 +170,29 @@ public class CarService {
             log.warning("Out of the map!");
             return;
         }
-        //IF WALL I DEAD
+        //If wall car will crash
         if(futureFieldlInformation.getIsWall()){
             clearField(fieldPosition,map);
-            log.info("Car DEAD");
+            log.info("Car crashed");
             return;
         }
-        //CHANGE PLACE
+        //Change place
         if(futureFieldlInformation==null){
             map.getMap().replace(futureFieldPosition, fieldlInformation);
             clearField(fieldPosition,map);
             log.info("Car CHANGE PLACE");
             return;
         }
-        // CRASH IN ANTOHER CAR
+        //Crash with another car
         resolveConflict(
                 fieldPosition,
                 fieldlInformation,
                 futureFieldPosition,
                 futureFieldlInformation,
                 map);
+
+        // Emit map state
+        messageTemplate.convertAndSend("/subscribe/map/" + carMove.getMapName(), map);
     }
 
     public void resolveConflict(FieldPosition fieldPosition,
@@ -197,32 +203,32 @@ public class CarService {
 
 
         if(NORMAL == futureFieldlInformation.getType() && TRUCK == fieldlInformation.getType()){
-            // DEAD ENEMY
+            // Crash enemy
             map.getMap().replace(futureFieldPosition, fieldlInformation);
             clearField(fieldPosition,map);
-            log.info("Dead enemy");
+            log.info("Crash enemy");
             return;
         }
 
         if(TRUCK == futureFieldlInformation.getType() && NORMAL == fieldlInformation.getType()){
-            // I DEAD
+            // I crashed
             clearField(fieldPosition,map);
-            log.info("Car DEAD");
+            log.info("Car crashed");
             return;
         }
 
         if(futureFieldlInformation.getType() == fieldlInformation.getType()){
-            // DEAD BOTH
+            // Crash both
             clearField(fieldPosition,map);
             clearField(futureFieldPosition,map);
-            log.info("Dead BOTH");
+            log.info("Crash both");
             return;
         }
 
         if(RACING != futureFieldlInformation.getType() && RACING == fieldlInformation.getType()){
-            // I DEAD
+            // Car crash
             clearField(fieldPosition,map);
-            log.info("Car Dead");
+            log.info("Car crashed");
             return;
         }
     }

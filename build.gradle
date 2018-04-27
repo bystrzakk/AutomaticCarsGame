@@ -28,6 +28,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile 'org.springframework.data:spring-data-jpa:2.0.6.RELEASE'
+	compile 'org.springframework.boot:spring-boot-starter-websocket'
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('com.h2database:h2')
 	compileOnly('org.projectlombok:lombok:1.16.12')

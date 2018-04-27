@@ -12,7 +12,7 @@ Coding Interview Challenge
 ##### 1. Language:
     Java 8
 ##### 2. Framework:
-    Springboot - 2.0.1
+    Spring - 5.0.5
 ##### 3. ORM
     Spring data-jpa - Kay-SR6
 ##### 4. Build Tool
@@ -21,6 +21,8 @@ Coding Interview Challenge
     JUnit 4
     AssertJ
 ##### 6. Libraries
+    Springboot - 2.0.1
+    Spring websocket - 5.0.5
     Lombok - 1.16.20
 ##### 7. Data Base
     H2 Database - 1.4.197
@@ -71,3 +73,7 @@ Coding Interview Challenge
 
 5. **Unselect the map:**
     >**Method:** POST **Request URL:** */unselected-map*
+    
+5. **Get actual map state:**
+    >**Method:** SOCKET **Request URL:** */cargame/subscribe/{mapName}* **Params:** *mapName:* name of actually played map 
+
