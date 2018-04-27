@@ -1,6 +1,7 @@
 package com.car.game.common.model;
 
 import com.car.game.common.enums.Move;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class CarHistory {
     private long id;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "name")
+    @JsonManagedReference
     private Car car;
     @Enumerated(EnumType.STRING)
     private Move move;

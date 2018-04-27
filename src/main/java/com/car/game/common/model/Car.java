@@ -1,6 +1,7 @@
 package com.car.game.common.model;
 
 import com.car.game.common.enums.CarType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +29,6 @@ public class Car {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<CarHistory> carHistory = new ArrayList<>();
 }
