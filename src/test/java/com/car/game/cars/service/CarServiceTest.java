@@ -8,8 +8,10 @@ import com.car.game.common.model.Car;
 import com.car.game.common.model.CarHistory;
 import com.car.game.common.repository.CarHistoryRepository;
 import com.car.game.common.repository.CarRepository;
+import com.car.game.game.ActualInformation;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,26 +28,24 @@ import static org.mockito.Mockito.when;
 
 public class CarServiceTest {
 
-    private CarRepository carRepository;
+
     private CarService carService;
+    private CarRepository carRepository;
     private CarHistoryRepository carHistoryRepository;
-    private CarAssembler carsAssembler;
+    private ActualInformation actualInformation = ActualInformation.getActualInformation();
+    private SimpMessageSendingOperations messageTemplate;
 
     @Before
     public void setUp() throws Exception {
         carRepository = mock(CarRepository.class);
-        carService = new CarService(carRepository, carsAssembler, carHistoryRepository);
+        carService = new CarService(carRepository, carHistoryRepository, messageTemplate);
     }
 
     @Test
     public void shouldReturnAllCars() throws Exception{
         when(carRepository.findAll()).thenReturn(getCars());
         final List<Car> carList = carService.getCars();
-
-        assertThat(carList.get(0).getName()).isEqualTo(getCar().getName());
-        assertThat(carList.get(0).getMapName()).isEqualTo(getCar().getMapName());
-        assertThat(carList.get(0).getType()).isEqualTo(getCar().getType());
-        assertThat(carList.get(0).isCrashed()).isEqualTo(getCar().isCrashed());
+        assertThat(carList.get(0).getName()).isEqualTo(getCar(false).getName());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class CarServiceTest {
 
     @Test
     public void shouldReturnFalseWhenAddingExistingCar() throws Exception{
-        when(carRepository.findCarByName(anyString())).thenReturn(getCar());
+        when(carRepository.findCarByName((any()))).thenReturn(getCar(false));
         final boolean isCarAdded = carService.addCar(getCarDto());
 
         assertThat(isCarAdded).isFalse();
@@ -65,8 +65,8 @@ public class CarServiceTest {
 
     @Test
     public void shouldReturnTrueWhenRemovingExistingCar() throws Exception{
-        when(carRepository.findCarByName(anyString())).thenReturn(getCar());
         when(carRepository.existsById(any())).thenReturn(true);
+        when(carRepository.findCarByName(anyString())).thenReturn(getCar(false));
         final boolean deleteCar = carService.deleteCar(getCarDto());
 
         assertThat(deleteCar).isTrue();
@@ -82,7 +82,7 @@ public class CarServiceTest {
 
     @Test
     public void shouldReturnFalseWhenRepairCarIsNotCrashed() throws Exception{
-        when(carRepository.findCarByName(anyString())).thenReturn(getCar());
+        when(carRepository.findCarByName(anyString())).thenReturn(getCar(false));
         final boolean repairCar = carService.repairCar("testCarName");
 
         assertThat(repairCar).isFalse();
@@ -90,7 +90,7 @@ public class CarServiceTest {
 
     @Test
     public void shouldReturnTrueWhenRepairCarIsCrashed() throws Exception{
-        when(carRepository.findCarByName(anyString())).thenReturn(new Car("testCarName",CarType.NORMAL,"testMapName",true));
+        when(carRepository.findCarByName(anyString())).thenReturn(getCar(true));
         final boolean repairCar = carService.repairCar("testCarName");
 
         assertThat(repairCar).isTrue();
@@ -100,15 +100,15 @@ public class CarServiceTest {
         return new CarInformation("testCarName",CarType.NORMAL);
     }
 
-    private Car getCar(){
-        return new Car("testCarName",CarType.NORMAL,"testMapName",false);
+    private Car getCar(boolean isCrashed){
+        return new Car("testCarName",CarType.NORMAL,"testMapName",isCrashed, Arrays.asList(new CarHistory()));
     }
 
     private List<CarHistory> getCarMovements(){
-        return Arrays.asList(new CarHistory(1l, getCar(), Move.FORWARD));
+        return Arrays.asList(new CarHistory(1l, getCar(false), Move.FORWARD));
     }
 
     private List<Car> getCars(){
-        return Arrays.asList(getCar());
+        return Arrays.asList(getCar(false));
     }
 }

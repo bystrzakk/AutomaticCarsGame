@@ -37,8 +37,25 @@ public class MapControllerTest extends TestConfig{
     public void testAddMap() throws Exception{
         mockMvc.perform(post("/map")
                 .contentType(contentType)
-                .content(json(getMapRequestDto("testMapName2","0,0,0"))))
+                .content(json(getMapRequestDto("testMapName01","0,0,0"))))
                 .andExpect(status().isCreated());
+    }
+
+    //TODO
+//    @Test
+//    public void testAddMapWithIncorrectFormatException() throws Exception{
+//        mockMvc.perform(post("/map")
+//                .contentType(contentType)
+//                .content(json(getMapRequestDto("testMapName2","0,0,0,"))))
+//                .andExpect(status().isBadRequest());
+//    }
+
+    @Test
+    public void testAddMapWithNumberFormatException() throws Exception{
+        mockMvc.perform(post("/map")
+                .contentType(contentType)
+                .content(json(getMapRequestDto("testMapName2","0,0,0,a"))))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -52,21 +69,15 @@ public class MapControllerTest extends TestConfig{
     public void testSelectMap() throws Exception{
         mockMvc.perform(post("/selected-map").param("name", "testMapName1"))
                 .andExpect(status().isOk());
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.[Response body]").value("true"));
     }
 
     @Test
     public void testUnSelectMap() throws Exception{
         mockMvc.perform(post("/unselected-map").param("name", "testMapName1"))
                 .andExpect(status().isOk());
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.[Response body]").value("true"));
     }
 
-    @Test
-    public void testDeleteMap() throws Exception {
-        mockMvc.perform(delete("/map").param("name", "testMapName1"))
-                .andExpect(status().isNoContent());
-    }
+
 
 
     private MapRequestDto getMapRequestDto(String name, String body){

@@ -1,5 +1,6 @@
 package com.car.game.cars.service;
 
+import com.car.exception.RemoveCarException;
 import com.car.game.cars.dto.CarInformation;
 import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
@@ -19,6 +20,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 import static com.car.game.common.enums.CarType.*;
@@ -76,7 +78,7 @@ public class CarService {
             log.info("Car " + carInformation.getName() + " has been removed from database");
             return true;
         }
-        log.warning("Problem with removing car: "+ carInformation.getName());
+        log.warning("Problem with removing car: " + carInformation.getName());
         return false;
     }
 
