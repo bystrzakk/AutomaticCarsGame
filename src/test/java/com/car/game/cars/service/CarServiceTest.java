@@ -61,18 +61,15 @@ public class CarServiceTest {
         assertThat(isCarAdded).isFalse();
     }
 
-//    @Test
-//    public void shouldRemoveExistingCar() throws Exception{
-//        CarService carService = mock(CarService.class);
-//        when(carService.findCarByName(anyString())).thenReturn(getCar(false));
-//
-//        doCallRealMethod().when(carService).deleteCar(any(String.class));
-//
-//        carService.deleteCar("testCarName");
-//
-//        verify(carService, times(1)).deleteCar("testCarName");
-//
-//    }
+    @Test
+    public void shouldRemoveExistingCar() throws Exception{
+        CarService carService = mock(CarService.class);
+        when(carService.findCarByName(anyString())).thenReturn(getCar(false));
+        doNothing().when(carService).deleteCar(any(String.class));
+        carService.deleteCar("testCarName");
+
+        verify(carService, times(1)).deleteCar("testCarName");
+    }
 
     @Test(expected = RemoveCarException.class)
     public void shouldReturnExceptionWhenRemovingNotExistingCar() throws Exception{
@@ -101,10 +98,6 @@ public class CarServiceTest {
 
     private Car getCar(boolean isCrashed){
         return new Car("testCarName",CarType.NORMAL,"testMapName",isCrashed, Arrays.asList(new CarHistory()));
-    }
-
-    private List<CarHistory> getCarMovements(){
-        return Arrays.asList(new CarHistory(1l, getCar(false), Move.FORWARD));
     }
 
     private List<Car> getCars(){

@@ -81,8 +81,6 @@ public class MapService {
             return false;
         }
 
-
-
         if (actualInformation.getMapByName(mapName)!=null) {
             log.warning("You can't delete the map: " + mapName + ". Currently in use.");
             return false;
@@ -101,7 +99,6 @@ public class MapService {
     private boolean correctMapBodyFormat(String mapBody){
         Integer splitedNumbers[] = Arrays.stream(mapBody.split(";|,")).map(Integer::parseInt).toArray(Integer[]::new);
         double squareOfSize = Math.sqrt(splitedNumbers.length);
-
         return (squareOfSize - Math.floor(squareOfSize)) == 0 ? true : false;
     }
 }
