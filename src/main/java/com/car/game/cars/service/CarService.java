@@ -1,6 +1,5 @@
 package com.car.game.cars.service;
 
-import com.car.exception.RemoveCarException;
 import com.car.game.cars.dto.CarInformation;
 import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
@@ -20,7 +19,6 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import static com.car.game.common.enums.CarType.*;
@@ -60,7 +58,7 @@ public class CarService {
     }
 
     private boolean exist(CarInformation carInformation){
-        Car car = carRepository.findCarByName(carInformation.getName());
+        Car car = findCarByName(carInformation.getName());
         return (car == null) ? false : true;
     }
 
@@ -71,22 +69,23 @@ public class CarService {
     public List<Move> getCarHistory(String name){
         return carHistoryRepository.findAllCarMovements(name);
     }
-    public boolean deleteCar(CarInformation carInformation) {
-        Car car = carRepository.findCarByName(carInformation.getName());
+
+    public boolean deleteCar(String carName) {
+        Car car = findCarByName(carName);
         if(car!=null){
             carRepository.delete(car);
-            log.info("Car " + carInformation.getName() + " has been removed from database");
+            log.info("Car " + carName + " has been removed from database");
             return true;
         }
-        log.warning("Problem with removing car: " + carInformation.getName());
+        log.warning("Problem with removing car: " + carName);
         return false;
     }
 
     @Transactional
     public boolean addCarToMap(CarSetup carSetup) {
-        Car car = carRepository.findCarByName(carSetup.getCar().getName());
+        Car car = findCarByName(carSetup.getCarName());
         if(car==null){
-            log.info("Car is not in DB");
+            printNoCarInDbValidationMsg(car.getName());
             return false;
         }
         if(car.getMapName()!=null){
@@ -110,7 +109,7 @@ public class CarService {
             return false;
         }
         carRepository.update(car.getName(),carSetup.getMapName(),car.getType());
-        fieldlInformation.setCarName(carSetup.getCar().getName());
+        fieldlInformation.setCarName(carSetup.getCarName());
         MapInGame map = actualInformation.getMapByName(carSetup.getMapName());
         map.getMap().replace(carSetup.getFieldPosition(), fieldlInformation);
         log.info("Car was added to game");
@@ -133,9 +132,7 @@ public class CarService {
 
     private CarHistory prepareCarHistoryMove(Move move, CarMove carMove){
         CarHistory carHistoryMove = new CarHistory();
-        Car car = new Car();
-        car.setType(carMove.getType());
-        car.setName(carMove.getName());
+        Car car = findCarByName(carMove.getCarName());
         carHistoryMove.setMove(move);
         carHistoryMove.setCar(car);
 
@@ -148,13 +145,20 @@ public class CarService {
     }
 
     public void moveCar(CarMove carMove) {
-        FieldlInformation fieldlInformation = actualInformation.getFieldInformationByCar(carMove);
-        FieldPosition fieldPosition = actualInformation.getCarPositionByCar(carMove);
+        Car car = findCarByName(carMove.getCarName());
+
+        if(car == null){
+            printNoCarInDbValidationMsg(car.getName());
+            return;
+        }
+
+        FieldlInformation fieldlInformation = actualInformation.getFieldInformationByCar(carMove, car.getMapName());
+        FieldPosition fieldPosition = actualInformation.getCarPositionByCar(carMove, car.getMapName());
         if(fieldlInformation==null||fieldPosition==null){
             log.info("Car not found");
             return;
         }
-        MapInGame map = actualInformation.getMapByName(carMove.getMapName());
+        MapInGame map = actualInformation.getMapByName(car.getMapName());
         // Changing only direction, no movement
         if(carMove.getMove()!=FORWARD){
             fieldlInformation.setDirection(updateDirection(FORWARD, fieldlInformation));
@@ -166,7 +170,7 @@ public class CarService {
         saveCarHistoryMove(FORWARD, carMove);
 
         FieldPosition futureFieldPosition = checkFuturePosition(fieldlInformation, fieldPosition,map.getSize());
-        FieldlInformation futureFieldlInformation = actualInformation.getMapInformation(futureFieldPosition, carMove.getMapName());
+        FieldlInformation futureFieldlInformation = actualInformation.getMapInformation(futureFieldPosition, car.getMapName());
 
         if(futureFieldPosition == null||futureFieldlInformation==null){
             log.warning("Out of the map!");
@@ -194,7 +198,7 @@ public class CarService {
                 map);
 
         // Emit map state
-        messageTemplate.convertAndSend("/subscribe/map/" + carMove.getMapName(), map);
+        messageTemplate.convertAndSend("/subscribe/map/" + car.getMapName(), map);
     }
 
     public void resolveConflict(FieldPosition fieldPosition,
@@ -303,10 +307,18 @@ public class CarService {
 
     }
 
+    private void printNoCarInDbValidationMsg(String carName){
+        log.warning("Car " + carName + " is not exist in database.");
+    }
+
+    private Car findCarByName(String carName){
+        return carRepository.findCarByName(carName);
+    }
+
     public boolean deleteCarFromMap(String carName) {
-        Car car = carRepository.findCarByName(carName);
+        Car car = findCarByName(carName);
         if (car == null) {
-            log.warning("Car " + carName + " is not exist in database.");
+            printNoCarInDbValidationMsg(carName);
             return false;
         }
 
@@ -316,11 +328,10 @@ public class CarService {
         }
 
         CarMove carMove = new CarMove();
-        carMove.setName(carName);
-        carMove.setMapName(car.getMapName());
+        carMove.setCarName(carName);
 
         ActualInformation actualInformation = ActualInformation.getActualInformation();
-        FieldPosition fieldPosition = actualInformation.getCarPositionByCar(carMove);
+        FieldPosition fieldPosition = actualInformation.getCarPositionByCar(carMove, car.getMapName());
         clearField(fieldPosition, actualInformation.getMapByName(car.getMapName()));
 
         car.setMapName(null);
@@ -331,9 +342,9 @@ public class CarService {
     }
 
     public boolean repairCar(String carName) {
-        Car car = carRepository.findCarByName(carName);
+        Car car = findCarByName(carName);
         if (car == null) {
-            log.warning("Car " + carName + " is not exist in database.");
+            printNoCarInDbValidationMsg(carName);
             return false;
         }
 
