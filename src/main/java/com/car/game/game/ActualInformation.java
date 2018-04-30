@@ -24,15 +24,15 @@ public class ActualInformation {
         return actualMapsInGame.get(name);
     }
 
-    public FieldlInformation getFieldInformationByCar(CarMove car) {
-        MapInGame map = getMapByName(car.getMapName());
+    public FieldlInformation getFieldInformationByCar(CarMove car, String mapName) {
+        MapInGame map = getMapByName(mapName);
         if(map==null){
             return null;
         }
         Optional<FieldlInformation> fieldlInformation = map.getMap()
                 .entrySet()
                 .stream()
-                .filter(a->car.getName().equals(a.getValue().getCarName()))
+                .filter(a->car.getCarName().equals(a.getValue().getCarName()))
                 .map(a->a.getValue())
                 .findAny();
         if(!fieldlInformation.isPresent()){
@@ -41,15 +41,15 @@ public class ActualInformation {
         return fieldlInformation.get();
     }
 
-    public FieldPosition getCarPositionByCar(CarMove car) {
-        MapInGame map = getMapByName(car.getMapName());
+    public FieldPosition getCarPositionByCar(CarMove car, String mapName) {
+        MapInGame map = getMapByName(mapName);
         if(map==null){
             return null;
         };
         Optional<FieldPosition> fieldPosition = map.getMap()
                 .entrySet()
                 .stream()
-                .filter(a->car.getName().equals(a.getValue().getCarName()))
+                .filter(a->car.getCarName().equals(a.getValue().getCarName()))
                 .map(a->a.getKey())
                 .findAny();
         if(!fieldPosition.isPresent()){

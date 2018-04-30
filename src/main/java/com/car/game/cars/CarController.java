@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @NoArgsConstructor
@@ -35,8 +36,8 @@ public class CarController {
 
     @DeleteMapping(value = "/car")
     @ApiOperation("Remove car")
-    public ResponseEntity<String> deleteCar(@RequestBody CarInformation carInformation){
-        final boolean isCarDeleted = carService.deleteCar(carInformation);
+    public ResponseEntity<String> deleteCar(@RequestParam String carName){
+        final boolean isCarDeleted = carService.deleteCar(carName);
         if (isCarDeleted==false){
             throw new RemoveCarException("Remove car exception");
         }
