@@ -72,7 +72,7 @@ public class CarService {
 
     public boolean deleteCar(String carName) {
         Car car = findCarByName(carName);
-        if(car!=null){
+        if(car != null){
             carRepository.delete(car);
             log.info("Car " + carName + " has been removed from database");
             return true;
@@ -84,8 +84,7 @@ public class CarService {
     @Transactional
     public boolean addCarToMap(CarSetup carSetup) {
         Car car = findCarByName(carSetup.getCarName());
-        if(car==null){
-            printNoCarInDbValidationMsg(car.getName());
+        if(car == null){
             return false;
         }
         if(car.getMapName()!=null){
@@ -148,7 +147,6 @@ public class CarService {
         Car car = findCarByName(carMove.getCarName());
 
         if(car == null){
-            printNoCarInDbValidationMsg(car.getName());
             return;
         }
 
@@ -307,18 +305,21 @@ public class CarService {
 
     }
 
-    private void printNoCarInDbValidationMsg(String carName){
-        log.warning("Car " + carName + " is not exist in database.");
-    }
-
     private Car findCarByName(String carName){
-        return carRepository.findCarByName(carName);
+        Car car = carRepository.findCarByName(carName);
+
+        if (car == null) {
+            log.warning("Car " + carName + " is not exist in database.");
+            return null;
+        } else {
+            return car;
+        }
     }
 
     public boolean deleteCarFromMap(String carName) {
         Car car = findCarByName(carName);
+
         if (car == null) {
-            printNoCarInDbValidationMsg(carName);
             return false;
         }
 
@@ -344,7 +345,6 @@ public class CarService {
     public boolean repairCar(String carName) {
         Car car = findCarByName(carName);
         if (car == null) {
-            printNoCarInDbValidationMsg(carName);
             return false;
         }
 
