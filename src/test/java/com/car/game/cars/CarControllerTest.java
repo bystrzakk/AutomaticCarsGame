@@ -75,10 +75,9 @@ public class CarControllerTest extends TestConfig {
     }
 
     @Test
-    public void testRemoveCarWithException() throws Exception {
-        mockMvc.perform(delete("/car")
-                .contentType(contentType)
-                .content(json(getCarDto())))
+    public void testRemoveCarWithBadRequestException() throws Exception {
+        mockMvc.perform(delete("/car").param("carName", "testCarName")
+                .contentType(contentType))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -86,9 +85,8 @@ public class CarControllerTest extends TestConfig {
     @Test
     public void testRemoveCar() throws Exception {
         carsService.addCar(getCarDto());
-        mockMvc.perform(delete("/car")
-                .contentType(contentType)
-                .content(json(getCarDto())))
+        mockMvc.perform(delete("/car").param("carName", "testCarName")
+                .contentType(contentType))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
@@ -131,11 +129,13 @@ public class CarControllerTest extends TestConfig {
     }
 
     private CarSetup getCarSetup(){
-        return new CarSetup(getCarDto(),"testMapName", new FieldPosition(0,0));
+        return new CarSetup("carName","testMapName", new FieldPosition(0,0));
+
+
     }
 
     private CarMove getCarMove(){
-        return new CarMove("testName",CarType.NORMAL,Move.FORWARD,"testMapName");
+        return new CarMove("testName", Move.FORWARD);
     }
 
     private Move getMove(){
@@ -143,6 +143,6 @@ public class CarControllerTest extends TestConfig {
     }
 
     private Car getCar(boolean isCrashed){
-        return new Car("testCarName",CarType.NORMAL,"testMapName",isCrashed, Arrays.asList(new CarHistory()));
+        return new Car("testCarName", CarType.NORMAL,"testMapName", isCrashed, Arrays.asList(new CarHistory()));
     }
 }

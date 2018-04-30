@@ -37,11 +37,8 @@ public class CarController {
     @DeleteMapping(value = "/car")
     @ApiOperation("Remove car")
     public ResponseEntity<String> deleteCar(@RequestParam String carName){
-        final boolean isCarDeleted = carService.deleteCar(carName);
-        if (isCarDeleted==false){
-            throw new RemoveCarException("Remove car exception");
-        }
-        return new ResponseEntity<>("Car is removed", HttpStatus.NO_CONTENT);
+        carService.deleteCar(carName);
+        return new ResponseEntity<>("Car "+ carName +" is removed", HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/cars")

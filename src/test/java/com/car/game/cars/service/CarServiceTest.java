@@ -1,6 +1,7 @@
 package com.car.game.cars.service;
 
 
+import com.car.exception.RemoveCarException;
 import com.car.game.cars.dto.CarInformation;
 import com.car.game.common.enums.CarType;
 import com.car.game.common.enums.Move;
@@ -11,23 +12,20 @@ import com.car.game.common.repository.CarRepository;
 import com.car.game.game.ActualInformation;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
+import static org.mockito.Mockito.*;
 
 
 public class CarServiceTest {
-
 
     private CarService carService;
     private CarRepository carRepository;
@@ -63,21 +61,22 @@ public class CarServiceTest {
         assertThat(isCarAdded).isFalse();
     }
 
-    @Test
-    public void shouldReturnTrueWhenRemovingExistingCar() throws Exception{
-        when(carRepository.existsById(any())).thenReturn(true);
-        when(carRepository.findCarByName(anyString())).thenReturn(getCar(false));
-        final boolean deleteCar = carService.deleteCar(getCarDto());
+//    @Test
+//    public void shouldRemoveExistingCar() throws Exception{
+//        CarService carService = mock(CarService.class);
+//        when(carService.findCarByName(anyString())).thenReturn(getCar(false));
+//
+//        doCallRealMethod().when(carService).deleteCar(any(String.class));
+//
+//        carService.deleteCar("testCarName");
+//
+//        verify(carService, times(1)).deleteCar("testCarName");
+//
+//    }
 
-        assertThat(deleteCar).isTrue();
-    }
-
-    @Test
-    public void shouldReturnFalseWhenRemovingNotExistingCar() throws Exception{
-        when(carRepository.existsById(any())).thenReturn(false);
-        final boolean deleteCar = carService.deleteCar(getCarDto());
-
-        assertThat(deleteCar).isFalse();
+    @Test(expected = RemoveCarException.class)
+    public void shouldReturnExceptionWhenRemovingNotExistingCar() throws Exception{
+        carService.deleteCar(null);
     }
 
     @Test
