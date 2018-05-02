@@ -1,7 +1,5 @@
 package com.car.game.map.service;
 
-
-import com.car.exception.SelectMapException;
 import com.car.game.common.model.MapGame;
 import com.car.game.common.repository.MapRepository;
 import com.car.game.configuration.MockMethod;
@@ -41,14 +39,6 @@ public class MapServiceTest extends MockMethod{
 
         assertThat(mapList.get(0).getName()).isEqualTo(getMapGame(true, false).getName());
     }
-//TODO
-//    @Test
-//    public void shouldReturnTrueWhenAddNewMap() throws Exception{
-//        when(mapAssembler.getMapGame(anyString(),anyString())).thenReturn(getMapGame(true, false));
-//        final boolean isMapAdded = mapService.addNewMap(getMapRequestDto("testMapName3","0,0,0"));
-//
-//        assertThat(isMapAdded).isTrue();
-//    }
 
     @Test
     public void shouldReturnFalseWhenAddIncorrectMap() throws Exception{
@@ -79,17 +69,6 @@ public class MapServiceTest extends MockMethod{
 
         assertThat(selectMap).isFalse();
     }
-
-//    @Test
-//    public void shouldReturnFalseForSelectedMapIfMapInUse() throws Exception{
-//
-////        ActualInformation.setConcuretnHashMapGame(getMap());
-////        ActualInformation.setActualMapName("testMapName");
-//        when(mapRepository.findByNameAndUsedIsFalseAndDeletedIsFalse(anyString())).thenReturn(null);
-//        final boolean selectMap = mapService.selectMap("testMapName");
-//
-//        assertThat(selectMap).isFalse();
-//    }
 
    @Test
    public void shouldReturnTrueIfMapExists() throws Exception{

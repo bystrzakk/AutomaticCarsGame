@@ -1,5 +1,6 @@
 package com.car.game.cars.service;
 
+import com.car.exception.RemoveCarException;
 import com.car.game.cars.dto.CarInformation;
 import com.car.game.cars.dto.CarMove;
 import com.car.game.cars.dto.CarSetup;
@@ -70,15 +71,15 @@ public class CarService {
         return carHistoryRepository.findAllCarMovements(name);
     }
 
-    public boolean deleteCar(String carName) {
+    public void deleteCar(String carName) {
         Car car = findCarByName(carName);
         if(car != null){
             carRepository.delete(car);
             log.info("Car " + carName + " has been removed from database");
-            return true;
+        } else {
+            log.warning("Problem with removing car: " + carName);
+            throw new RemoveCarException("Remove car exception");
         }
-        log.warning("Problem with removing car: " + carName);
-        return false;
     }
 
     @Transactional
@@ -305,7 +306,7 @@ public class CarService {
 
     }
 
-    private Car findCarByName(String carName){
+    protected Car findCarByName(String carName){
         Car car = carRepository.findCarByName(carName);
 
         if (car == null) {
